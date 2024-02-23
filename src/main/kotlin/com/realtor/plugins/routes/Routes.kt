@@ -47,4 +47,17 @@ fun Route.category(
             call.respondText("${e.message}")
         }
     }
+
+    get(CATEGORY_CREATE) {
+        try {
+            val categoryList = db.getAllCategories()
+            if (categoryList.isNotEmpty()){
+                call.respond(categoryList)
+            }else{
+                call.respondText("No Category Found!!")
+            }
+        }catch (e: Throwable){
+            call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+        }
+    }
 }
