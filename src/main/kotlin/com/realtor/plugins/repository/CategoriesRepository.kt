@@ -3,9 +3,8 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.dao.CategoriesDao
 import com.realtor.plugins.data.Categories
 import com.realtor.plugins.data.CategoriesTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import javax.xml.crypto.Data
 
@@ -30,17 +29,27 @@ class CategoriesRepository : CategoriesDao {
         }
 
 
-    override suspend fun getCategoryById(id: Int): Categories? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCategoryById(id: Int): Categories? =
+        DatabaseFactory.dbQuery {
+            CategoriesTable.select { CategoriesTable.id.eq(id) }
+                .map {
+                    rowToCategory(it)
+                }.singleOrNull()
+        }
 
-    override suspend fun deleteCategoryById(id: Int): Int? {
-        TODO("Not yet implemented")
-    }
 
-    override suspend fun updateCategory(id: Int, name: String, priority: String): Int {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteCategoryById(id: Int): Int? =
+        DatabaseFactory.dbQuery {
+            CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
+        }
+
+    override suspend fun updateCategory(id: Int, name: String, priority: String): Int =
+        DatabaseFactory.dbQuery {
+            CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
+                category[CategoriesTable.name] = name
+                category[CategoriesTable.id] = id
+            }
+        }
 
     private fun rowToCategory(row: ResultRow): Categories? {
         if (row == null) {
