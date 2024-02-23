@@ -3,13 +3,15 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.data.CategoriesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
-    fun init(){
+    fun init() {
         Database.connect(hikari())
         transaction {
             SchemaUtils.create(CategoriesTable)
@@ -25,5 +27,13 @@ object DatabaseFactory {
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
 
         return HikariDataSource(config)
+    }
+
+    suspend fun <T> dbQuery(block: () -> Unit) {
+        withContext(Dispatchers.IO) {
+            transaction {
+                block()
+            }
+        }
     }
 }
