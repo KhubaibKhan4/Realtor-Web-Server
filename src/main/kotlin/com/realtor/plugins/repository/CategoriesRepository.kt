@@ -17,13 +17,12 @@ class CategoriesRepository : CategoriesDao {
                 category[CategoriesTable.priority] = priority
             }
         }
-        return statement?.resultedValues?.get(0)?.let { rowToCategory(it) }
+        return rowToCategory(statement?.resultedValues?.get(0) !!)
     }
 
     override suspend fun getAllCategories(): List<Categories> =
         DatabaseFactory.dbQuery {
-            CategoriesTable.selectAll()
-                .mapNotNull {
+            CategoriesTable.selectAll().mapNotNull {
                     rowToCategory(it)
                 }
         }
@@ -38,7 +37,7 @@ class CategoriesRepository : CategoriesDao {
         }
 
 
-    override suspend fun deleteCategoryById(id: Int): Int? =
+    override suspend fun deleteCategoryById(id: Int): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }

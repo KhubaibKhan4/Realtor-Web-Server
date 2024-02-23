@@ -14,16 +14,13 @@ import kotlinx.serialization.json.Json
 @OptIn(KtorExperimentalLocationsAPI::class)
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        json(json = Json {
-            prettyPrint = true
-        })
+        json(
+            json = Json {
+                prettyPrint = true
+            }
+        )
     }
     install(Locations) {
 
-    }
-    DatabaseFactory.init()
-    val db = CategoriesRepository()
-    routing {
-        category(db)
     }
 }
