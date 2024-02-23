@@ -11,15 +11,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 const val CATEGORY_CREATE = "$API_VERSION/category"
-const val GET_CATEGORY_BY_ID = "$API_VERSION/category/{id}"
 
 @OptIn(KtorExperimentalLocationsAPI::class)
 @Location(CATEGORY_CREATE)
 class CategoryCreateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
-@Location(GET_CATEGORY_BY_ID)
-class GetCategoryById
 
 fun Route.category(
     db: CategoriesRepository
@@ -58,6 +54,23 @@ fun Route.category(
             }
         }catch (e: Throwable){
             call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+        }
+    }
+    get("v1/category/{id}") {
+        val parameter = call.parameters["id"]
+        try {
+            val category = parameter?.toInt()?.let { categoryId ->
+                db.getCategoryById(id = categoryId)
+            } ?:return@get call.respondText(
+                text = "Invalid Id",
+                status = HttpStatusCode.BadRequest
+            )
+
+            category.id.let {
+                call.respond(status = HttpStatusCode.OK, category)
+            }
+        }catch (e: Throwable){
+            call.respond(status = HttpStatusCode.BadRequest,"Problems While Fetching Category")
         }
     }
 }
