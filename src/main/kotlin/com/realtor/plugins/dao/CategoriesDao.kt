@@ -5,7 +5,7 @@ import com.realtor.plugins.data.Categories
 interface CategoriesDao {
     suspend fun insert(
         name: String,
-        priority: String
+        priority: Int
     ): Categories?
 
     suspend fun getAllCategories(): List<Categories>?
