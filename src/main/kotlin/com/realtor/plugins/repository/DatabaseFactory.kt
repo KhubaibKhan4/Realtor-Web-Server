@@ -29,11 +29,10 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    suspend fun <T> dbQuery(block: () -> Unit) {
+    suspend fun <T> dbQuery(block: () -> T): T =
         withContext(Dispatchers.IO) {
             transaction {
                 block()
             }
         }
-    }
 }
