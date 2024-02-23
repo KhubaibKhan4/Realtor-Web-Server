@@ -97,4 +97,35 @@ fun Route.category(
         }
     }
 
+    put("v1/category/{id}") {
+        val id = call.parameters["id"] ?: return@put call.respondText(
+            text = "Id Not Found!!",
+            status = HttpStatusCode.BadRequest
+        )
+
+        val updateInfo = call.receive<Parameters>()
+        val name = updateInfo["name"] ?: return@put call.respondText(
+            text = "Missing Field",
+            status = HttpStatusCode.Unauthorized
+        )
+        val priority = updateInfo["priority"] ?: return@put call.respondText(
+            text = "Missing Field",
+            status = HttpStatusCode.Unauthorized
+        )
+
+        try {
+            val result = id.toInt().let { categoryId ->
+                db.updateCategory(id.toInt(),name,priority)
+            }
+            if (result == 1){
+                call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)
+            }else{
+                call.respondText("Something Went Wrong", status = HttpStatusCode.BadRequest)
+            }
+
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+        }
+
+    }
 }
