@@ -32,14 +32,14 @@ fun Route.category(
         )
 
         try {
-            val category =  db.insert(name, priority.toInt())
+            val category = db.insert(name, priority.toInt())
             category?.id?.let {
                 call.respond(status = HttpStatusCode.OK, category)
 
             }
 
 
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             call.respondText("${e.message}")
         }
     }
@@ -47,12 +47,12 @@ fun Route.category(
     get(CATEGORY_CREATE) {
         try {
             val categoryList = db.getAllCategories()
-            if (categoryList.isNotEmpty()){
+            if (categoryList.isNotEmpty()) {
                 call.respond(categoryList)
-            }else{
+            } else {
                 call.respondText("No Category Found!!")
             }
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
         }
     }
@@ -61,7 +61,7 @@ fun Route.category(
         try {
             val category = parameter?.toInt()?.let { categoryId ->
                 db.getCategoryById(id = categoryId)
-            } ?:return@get call.respondText(
+            } ?: return@get call.respondText(
                 text = "Invalid Id",
                 status = HttpStatusCode.BadRequest
             )
@@ -69,8 +69,32 @@ fun Route.category(
             category.id.let {
                 call.respond(status = HttpStatusCode.OK, category)
             }
-        }catch (e: Throwable){
-            call.respond(status = HttpStatusCode.BadRequest,"Problems While Fetching Category")
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, "Problems While Fetching Category")
         }
     }
+    delete("v1/category/{id}") {
+        val parameter = call.parameters["id"]
+        try {
+            val category = parameter?.toInt()?.let { categoryId ->
+                db.deleteCategoryById(categoryId)
+            } ?: return@delete call.respondText(
+                text = "No Id Found",
+                status = HttpStatusCode.BadRequest
+            )
+
+            if (category == 1) {
+                call.respondText(
+                    text = "Deleted Successfully",
+                    status = HttpStatusCode.OK
+                )
+            } else {
+                call.respondText("Id Not Found", status = HttpStatusCode.BadRequest)
+            }
+
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+        }
+    }
+
 }
