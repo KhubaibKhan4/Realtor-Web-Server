@@ -1,6 +1,5 @@
 package com.realtor.plugins.routes
 
-import com.realtor.API_VERSION
 import com.realtor.plugins.repository.CategoriesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -10,17 +9,10 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-const val CATEGORY_CREATE = "$API_VERSION/category"
-
-@OptIn(KtorExperimentalLocationsAPI::class)
-@Location(CATEGORY_CREATE)
-class CategoryCreateRoute
-
-
 fun Route.category(
     db: CategoriesRepository
 ) {
-    post(CATEGORY_CREATE) {
+    post("v1/category") {
         val parameters = call.receive<Parameters>()
         val name = parameters["name"] ?: return@post call.respondText(
             text = "MISSING FIELD",
@@ -34,26 +26,25 @@ fun Route.category(
         try {
             val category = db.insert(name, priority.toInt())
             category?.id?.let {
-                call.respond(status = HttpStatusCode.OK, category)
-
+                call.respond(status = HttpStatusCode.OK, "Uploaded to Server Successfully $category")
             }
 
 
         } catch (e: Throwable) {
-            call.respondText("${e.message}")
+            call.respondText("Get Error While Posting Data to Server: ${e.message}")
         }
     }
 
-    get(CATEGORY_CREATE) {
+    get("v1/category") {
         try {
             val categoryList = db.getAllCategories()
             if (categoryList.isNotEmpty()) {
                 call.respond(categoryList)
             } else {
-                call.respondText("No Category Found!!")
+                call.respondText("No Category Found!!", status = HttpStatusCode.OK)
             }
         } catch (e: Throwable) {
-            call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+            call.respond(status = HttpStatusCode.BadRequest, "Getting Categories Error " + e.message.toString())
         }
     }
     get("v1/category/{id}") {
@@ -115,11 +106,11 @@ fun Route.category(
 
         try {
             val result = id.toInt().let { categoryId ->
-                db.updateCategory(id.toInt(),name,priority)
+                db.updateCategory(id.toInt(), name, priority)
             }
-            if (result == 1){
+            if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)
-            }else{
+            } else {
                 call.respondText("Something Went Wrong", status = HttpStatusCode.BadRequest)
             }
 
@@ -127,5 +118,15 @@ fun Route.category(
             call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
         }
 
+    }
+    get("/") {
+        try {
+            call.respondText(
+                "Welcome to Realtor Web, Please check your Endpoints to get Others Details",
+                status = HttpStatusCode.OK
+            )
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
+        }
     }
 }
