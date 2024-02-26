@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class HousesRepository : HousesDao {
-    override suspend fun insert(title: String, price: String, type: String, size: String, rooms: Int): Houses? {
+    override suspend fun insert(title: String, price: String, type: String, size: String, rooms: String): Houses? {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = HousesTable.insert { house ->
@@ -19,7 +19,7 @@ class HousesRepository : HousesDao {
                 house[HousesTable.rooms]
             }
         }
-        return rowToResult(statement?.resultedValues?.get(0)!!)
+        return statement?.resultedValues?.get(0)?.let { rowToResult(it) }
     }
 
     override suspend fun getHouses(): List<Houses>? {
@@ -55,7 +55,7 @@ class HousesRepository : HousesDao {
         price: String,
         type: String,
         size: String,
-        rooms: Int
+        rooms: String
     ): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.update({ HousesTable.id.eq(id) }) { house ->

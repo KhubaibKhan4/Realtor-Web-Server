@@ -8,11 +8,11 @@ interface HousesDao {
         price: String,
         type: String,
         size: String,
-        rooms: Int
+        rooms: String
     ): Houses?
 
     suspend fun getHouses(): List<Houses>?
     suspend fun getHousesById(id: Int): Houses?
     suspend fun deleteHouseById(id: Int): Int?
-    suspend fun updateHouseById(id: Int, title: String, price: String, type: String, size: String, rooms: Int): Int?
+    suspend fun updateHouseById(id: Int, title: String, price: String, type: String, size: String, rooms: String): Int?
 }
