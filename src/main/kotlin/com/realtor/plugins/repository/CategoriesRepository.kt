@@ -1,12 +1,11 @@
 package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.CategoriesDao
-import com.realtor.plugins.data.Categories
+import com.realtor.plugins.data.model.Categories
 import com.realtor.plugins.data.CategoriesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import javax.xml.crypto.Data
 
 class CategoriesRepository : CategoriesDao {
     override suspend fun insert(name: String, priority: Int): Categories? {
