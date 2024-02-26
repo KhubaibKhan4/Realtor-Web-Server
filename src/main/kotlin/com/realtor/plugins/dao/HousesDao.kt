@@ -12,4 +12,5 @@ interface HousesDao {
     ): Houses?
 
     suspend fun getHouses(): List<Houses>?
+    suspend fun getHousesById(id: Int): Houses?
 }
