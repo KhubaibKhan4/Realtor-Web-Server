@@ -49,8 +49,24 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun updateHouseById(title: String, price: String, type: String, size: String, rooms: Int): Int? {
-        TODO("Not yet implemented")
+    override suspend fun updateHouseById(
+        id: Int,
+        title: String,
+        price: String,
+        type: String,
+        size: String,
+        rooms: Int
+    ): Int? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.update({ HousesTable.id.eq(id) }) { house ->
+                house[HousesTable.id] = id
+                house[HousesTable.title] = title
+                house[HousesTable.price] = price
+                house[HousesTable.type] = type
+                house[HousesTable.size] = size
+                house[HousesTable.rooms] = rooms
+            }
+        }
     }
 
     fun rowToResult(row: ResultRow): Houses? {
