@@ -211,5 +211,28 @@ fun Route.houses(
             )
         }
     }
+    get("v1/houses/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val house = id?.toInt()?.let { houseId ->
+                db.deleteHouseById(houseId)
+            } ?: return@get call.respondText(
+                text = "Id is Invalid",
+                status = HttpStatusCode.BadRequest
+            )
+            if (house == 1){
+                call.respondText(text = "House #$id Deleted Successfully", status = HttpStatusCode.OK)
+            }else{
+                call.respondText("Id Not Found", status = HttpStatusCode.BadRequest)
+            }
+
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Deleting House from Server ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
