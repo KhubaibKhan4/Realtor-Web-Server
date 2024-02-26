@@ -211,12 +211,12 @@ fun Route.houses(
             )
         }
     }
-    get("v1/houses/{id}") {
+    delete("v1/houses/{id}") {
         val id = call.parameters["id"]
         try {
             val house = id?.toInt()?.let { houseId ->
                 db.deleteHouseById(houseId)
-            } ?: return@get call.respondText(
+            } ?: return@delete call.respondText(
                 text = "Id is Invalid",
                 status = HttpStatusCode.BadRequest
             )
@@ -234,5 +234,6 @@ fun Route.houses(
             )
         }
     }
+
 
 }
