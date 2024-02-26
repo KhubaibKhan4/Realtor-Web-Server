@@ -16,7 +16,7 @@ class HousesRepository : HousesDao {
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
                 house[HousesTable.size] = size
-                house[HousesTable.rooms]
+                house[HousesTable.rooms] = rooms
             }
         }
         return statement?.resultedValues?.get(0)?.let { rowToResult(it) }

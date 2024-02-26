@@ -162,7 +162,7 @@ fun Route.houses(
         try {
             val houses = db.insert(title, price, type, size, rooms)
             houses?.id?.let {
-                call.respond(status = HttpStatusCode.OK,  "Data Uploaded Successfully $it")
+                call.respond(status = HttpStatusCode.OK,  "Data Uploaded Successfully $houses")
             }
 
         } catch (e: Throwable) {
