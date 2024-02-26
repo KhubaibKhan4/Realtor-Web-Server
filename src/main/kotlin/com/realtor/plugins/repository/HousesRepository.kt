@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class HousesRepository : HousesDao {
     override suspend fun insert(title: String, price: String, type: String, size: String, rooms: Int): Houses? {
-        val statement: InsertStatement<Number>? = null
+        var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = HousesTable.insert { house ->
                 house[HousesTable.title] = title
@@ -19,6 +19,7 @@ class HousesRepository : HousesDao {
                 house[HousesTable.rooms]
             }
         }
+        return rowToResult(statement?.resultedValues?.get(0)!!)
     }
 
     override suspend fun getHouses(): List<Houses>? {
