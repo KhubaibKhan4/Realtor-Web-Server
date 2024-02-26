@@ -5,6 +5,7 @@ import com.realtor.plugins.data.model.Houses
 import com.realtor.plugins.data.table.HousesTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
@@ -33,7 +34,13 @@ class HousesRepository : HousesDao {
     }
 
     override suspend fun getHousesById(id: Int): Houses? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.id.eq(id)
+            }.map {
+                rowToResult(it)
+            }.singleOrNull()
+        }
     }
 
     override suspend fun deleteHouseById(id: Int): Int? {
