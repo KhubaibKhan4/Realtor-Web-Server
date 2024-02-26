@@ -1,4 +1,4 @@
-package com.realtor.plugins.data
+package com.realtor.plugins.data.table
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table

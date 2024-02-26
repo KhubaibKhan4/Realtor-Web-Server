@@ -1,6 +1,6 @@
 package com.realtor.plugins.repository
 
-import com.realtor.plugins.data.CategoriesTable
+import com.realtor.plugins.data.table.CategoriesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
