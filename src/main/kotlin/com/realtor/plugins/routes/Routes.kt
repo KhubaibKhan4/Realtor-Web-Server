@@ -186,7 +186,27 @@ fun Route.houses(
             }
         } catch (e: Throwable) {
             call.respondText(
-                text = "Error While Get Lists from Server ${e.message}",
+                text = "Error While Getting Lists from Server ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+    get("v1/houses/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val houses = id?.toInt()?.let { houseId ->
+                db.getHousesById(houseId)
+            } ?: return@get call.respondText(
+                text = "Id is Invalid",
+                status = HttpStatusCode.BadRequest
+            )
+            houses.let { houseDetail ->
+                call.respond(status = HttpStatusCode.OK, houses)
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Getting Houses Detail from Server ${e.message}",
                 status = HttpStatusCode.Unauthorized
             )
         }
