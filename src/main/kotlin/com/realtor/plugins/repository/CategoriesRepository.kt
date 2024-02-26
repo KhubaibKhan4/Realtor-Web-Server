@@ -2,7 +2,7 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.CategoriesDao
 import com.realtor.plugins.data.model.Categories
-import com.realtor.plugins.data.CategoriesTable
+import com.realtor.plugins.data.table.CategoriesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
