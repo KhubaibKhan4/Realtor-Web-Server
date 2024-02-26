@@ -9,5 +9,5 @@ data class Houses(
     val price: String,
     val type: String,
     val size: String,
-    val rooms: String
+    val rooms: Int
 )
