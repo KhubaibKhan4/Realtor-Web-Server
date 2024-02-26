@@ -220,9 +220,9 @@ fun Route.houses(
                 text = "Id is Invalid",
                 status = HttpStatusCode.BadRequest
             )
-            if (house == 1){
+            if (house == 1) {
                 call.respondText(text = "House #$id Deleted Successfully", status = HttpStatusCode.OK)
-            }else{
+            } else {
                 call.respondText("Id Not Found", status = HttpStatusCode.BadRequest)
             }
 
@@ -231,6 +231,54 @@ fun Route.houses(
             call.respondText(
                 text = "Error While Deleting House from Server ${e.message}",
                 status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+    put("v1/house/{id}") {
+        val id = call.parameters["id"] ?: return@put call.respondText(
+            text = "Invalid Id Found",
+            status = HttpStatusCode.BadRequest
+        )
+        val updateInfo = call.receive<Parameters>()
+        val title = updateInfo["title"] ?: return@put call.respondText(
+            text = "MISSING Title",
+            status = HttpStatusCode.BadRequest
+        )
+        val price = updateInfo["price"] ?: return@put call.respondText(
+            text = "MISSING Price",
+            status = HttpStatusCode.BadRequest
+        )
+        val type = updateInfo["type"] ?: return@put call.respondText(
+            text = "MISSING Type",
+            status = HttpStatusCode.BadRequest
+        )
+        val size = updateInfo["size"] ?: return@put call.respondText(
+            text = "MISSING Size",
+            status = HttpStatusCode.BadRequest
+        )
+        val rooms = updateInfo["rooms"] ?: return@put call.respondText(
+            text = "MISSING Rooms",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val result = id.toInt().let {
+                db.updateHouseById(id.toInt(), title, price, type, size, rooms.toInt())
+            }
+            if (result == 1) {
+                call.respondText(
+                    text = "Data Updated Successfully",
+                    status = HttpStatusCode.OK
+                )
+            } else {
+                call.respondText(
+                    text = "Error While Updating Data..",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Updating Data from Server ${e.message}", status = HttpStatusCode.BadRequest
             )
         }
     }
