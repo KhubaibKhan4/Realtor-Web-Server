@@ -173,4 +173,23 @@ fun Route.houses(
         }
     }
 
+    get("v1/houses") {
+        try {
+            val housesList = db.getHouses()
+            if (housesList?.isNotEmpty() == true) {
+                call.respond(housesList)
+            } else {
+                call.respondText(
+                    text = "No Houses Found. Please Retry Soon",
+                    status = HttpStatusCode.OK
+                )
+            }
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Get Lists from Server ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+
 }
