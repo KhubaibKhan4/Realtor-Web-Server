@@ -1,6 +1,5 @@
 package com.realtor.plugins
 
-import com.realtor.API_VERSION
 import com.realtor.plugins.repository.CategoriesRepository
 import com.realtor.plugins.repository.DatabaseFactory
 import com.realtor.plugins.repository.HousesRepository

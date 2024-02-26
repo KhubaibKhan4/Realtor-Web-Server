@@ -135,7 +135,7 @@ fun Route.category(
 fun Route.houses(
     db: HousesRepository
 ) {
-    post("v1/houses") {
+    post("v1/house") {
         val parameters = call.receive<Parameters>()
 
         val title = parameters["title"] ?: return@post call.respondText(
@@ -160,9 +160,9 @@ fun Route.houses(
         )
 
         try {
-            val houses = db.insert(title, price, type, size, rooms.toInt())
+            val houses = db.insert(title, price, type, size, rooms)
             houses?.id?.let {
-                call.respondText(text = "Data Uploaded Successfully $it", status = HttpStatusCode.OK)
+                call.respond(status = HttpStatusCode.OK,  "Data Uploaded Successfully $it")
             }
 
         } catch (e: Throwable) {
@@ -173,7 +173,7 @@ fun Route.houses(
         }
     }
 
-    get("v1/houses") {
+    get("v1/house") {
         try {
             val housesList = db.getHouses()
             if (housesList?.isNotEmpty() == true) {
@@ -191,7 +191,7 @@ fun Route.houses(
             )
         }
     }
-    get("v1/houses/{id}") {
+    get("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
             val houses = id?.toInt()?.let { houseId ->
@@ -211,7 +211,7 @@ fun Route.houses(
             )
         }
     }
-    delete("v1/houses/{id}") {
+    delete("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
             val house = id?.toInt()?.let { houseId ->
@@ -262,7 +262,7 @@ fun Route.houses(
         )
         try {
             val result = id.toInt().let {
-                db.updateHouseById(id.toInt(), title, price, type, size, rooms.toInt())
+                db.updateHouseById(id.toInt(), title, price, type, size, rooms)
             }
             if (result == 1) {
                 call.respondText(
