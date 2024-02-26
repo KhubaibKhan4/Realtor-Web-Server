@@ -3,7 +3,7 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.dao.HousesDao
 import com.realtor.plugins.data.model.Houses
 
-class HousesRepository: HousesDao {
+class HousesRepository : HousesDao {
     override suspend fun insert(title: String, price: String, type: String, size: String, rooms: Int): Houses? {
         TODO("Not yet implemented")
     }
