@@ -1,6 +1,7 @@
 package com.realtor.plugins.repository
 
 import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.data.table.HousesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ object DatabaseFactory {
         Database.connect(hikari())
         transaction {
             SchemaUtils.create(CategoriesTable)
+            SchemaUtils.create(HousesTable)
         }
     }
 
