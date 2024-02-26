@@ -1,6 +1,7 @@
 package com.realtor.plugins.routes
 
 import com.realtor.plugins.repository.CategoriesRepository
+import com.realtor.plugins.repository.HousesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -129,4 +130,47 @@ fun Route.category(
             call.respond(status = HttpStatusCode.BadRequest, e.message.toString())
         }
     }
+}
+
+fun Route.houses(
+    db: HousesRepository
+) {
+    post("v1/houses") {
+        val parameters = call.receive<Parameters>()
+
+        val title = parameters["title"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val price = parameters["price"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val type = parameters["type"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val size = parameters["size"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val rooms = parameters["rooms"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+
+        try {
+            val houses = db.insert(title, price, type, size, rooms.toInt())
+            houses?.id?.let {
+                call.respondText(text = "Data Uploaded Successfully $it", status = HttpStatusCode.OK)
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Pushing Data to Server",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+
 }
