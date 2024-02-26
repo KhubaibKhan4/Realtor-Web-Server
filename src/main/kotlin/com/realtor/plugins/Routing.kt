@@ -3,7 +3,9 @@ package com.realtor.plugins
 import com.realtor.API_VERSION
 import com.realtor.plugins.repository.CategoriesRepository
 import com.realtor.plugins.repository.DatabaseFactory
+import com.realtor.plugins.repository.HousesRepository
 import com.realtor.plugins.routes.category
+import com.realtor.plugins.routes.houses
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
@@ -18,7 +20,9 @@ fun Application.configureRouting() {
         }
     }
     val db = CategoriesRepository()
+    val housesDb = HousesRepository()
     routing {
-       category(db)
+        category(db)
+        houses(housesDb)
     }
 }
