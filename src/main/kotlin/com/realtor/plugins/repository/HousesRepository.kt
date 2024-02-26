@@ -5,6 +5,7 @@ import com.realtor.plugins.data.model.Houses
 import com.realtor.plugins.data.table.HousesTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class HousesRepository : HousesDao {
@@ -23,7 +24,12 @@ class HousesRepository : HousesDao {
     }
 
     override suspend fun getHouses(): List<Houses>? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            HousesTable.selectAll()
+                .mapNotNull {
+                    rowToResult(it)
+                }
+        }
     }
 
     override suspend fun getHousesById(id: Int): Houses? {
