@@ -10,4 +10,6 @@ interface HousesDao {
         size: String,
         rooms: Int
     ): Houses?
+
+    suspend fun getHouses(): List<Houses>?
 }
