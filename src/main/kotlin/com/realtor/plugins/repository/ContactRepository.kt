@@ -45,7 +45,14 @@ class ContactRepository : ContactDao {
     }
 
     override suspend fun updateContactById(id: Int, name: String, email: String, message: String): Int? {
-        TODO("Not yet implemented")
+       return DatabaseFactory.dbQuery {
+           ContactTable.update({ContactTable.id.eq(id)}){contact ->
+               contact[ContactTable.id] = id
+               contact[ContactTable.name] = name
+               contact[ContactTable.email] = email
+               contact[ContactTable.message]= message
+           }
+       }
     }
 
     fun rowToResult(row: ResultRow): Contact? {
