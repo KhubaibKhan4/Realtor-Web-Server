@@ -1,6 +1,7 @@
 package com.realtor.plugins.routes
 
 import com.realtor.plugins.repository.CategoriesRepository
+import com.realtor.plugins.repository.ContactRepository
 import com.realtor.plugins.repository.HousesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -283,5 +284,10 @@ fun Route.houses(
         }
     }
 
+
+}
+fun Route.contact(
+    db: ContactRepository
+){
 
 }
