@@ -369,10 +369,15 @@ fun Route.contact(
                 text = "Invalid ID Found",
                 status = HttpStatusCode.OK
             )
-            contact.let {
+            if (contact == 1) {
                 call.respondText(
                     text = "Deleted Contact Successfully",
                     status = HttpStatusCode.OK
+                )
+            } else {
+                call.respondText(
+                    text = "Error While Deleting Contact",
+                    status = HttpStatusCode.BadRequest
                 )
             }
 
@@ -383,4 +388,5 @@ fun Route.contact(
             )
         }
     }
+
 }
