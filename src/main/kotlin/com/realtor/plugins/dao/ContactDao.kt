@@ -9,4 +9,6 @@ interface ContactDao {
         email: String,
         message: String
     ): Contact?
+
+    suspend fun getAllContacts(): List<Contact>?
 }
