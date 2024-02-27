@@ -360,4 +360,27 @@ fun Route.contact(
             )
         }
     }
+    delete("v1/contact/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val contact = id?.toInt()?.let {
+                db.deleteContactById(it)
+            } ?: call.respondText(
+                text = "Invalid ID Found",
+                status = HttpStatusCode.OK
+            )
+            contact.let {
+                call.respondText(
+                    text = "Deleted Contact Successfully",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE GETTING DATA From SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 }
