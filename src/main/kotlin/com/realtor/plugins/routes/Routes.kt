@@ -335,7 +335,27 @@ fun Route.contact(
 
         } catch (e: Throwable) {
             call.respondText(
-                text = "ERROR WHILE GETTING DATA TO SERVER ${e.message}",
+                text = "ERROR WHILE GETTING DATA FROM SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+    get("v1/contact/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val contact = id?.toInt()?.let { contactID ->
+                db.getContactById(contactID)
+            } ?: return@get call.respondText(
+                text = "No Id Found",
+                status = HttpStatusCode.BadRequest
+            )
+            contact.let {
+                call.respond(status = HttpStatusCode.OK, contact)
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE GETTING DATA From SERVER ${e.message}",
                 status = HttpStatusCode.Unauthorized
             )
         }
