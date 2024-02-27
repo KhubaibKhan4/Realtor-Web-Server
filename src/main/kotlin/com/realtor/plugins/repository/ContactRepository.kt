@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ContactRepository : ContactDao {
     override suspend fun insert(id: Int, name: String, email: String, message: String): Contact? {
-        val insertStatement: InsertStatement<Number>? = null
+        var insertStatement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             insertStatement = ContactTable.insert { contact ->
                 contact[ContactTable.id] = id
@@ -18,6 +18,7 @@ class ContactRepository : ContactDao {
                 contact[ContactTable.message] = message
             }
         }
+        return insertStatement?.resultedValues?.get(0)?.let { rowToResult(it) }
     }
 
     override suspend fun getAllContacts(): List<Contact>? {
