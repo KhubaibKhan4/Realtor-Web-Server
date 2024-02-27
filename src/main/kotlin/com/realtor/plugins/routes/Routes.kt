@@ -1,6 +1,7 @@
 package com.realtor.plugins.routes
 
 import com.realtor.plugins.repository.CategoriesRepository
+import com.realtor.plugins.repository.ContactRepository
 import com.realtor.plugins.repository.HousesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -162,7 +163,7 @@ fun Route.houses(
         try {
             val houses = db.insert(title, price, type, size, rooms)
             houses?.id?.let {
-                call.respond(status = HttpStatusCode.OK,  "Data Uploaded Successfully $houses")
+                call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $houses")
             }
 
         } catch (e: Throwable) {
@@ -282,6 +283,10 @@ fun Route.houses(
             )
         }
     }
+}
 
+fun Route.contact(
+    db: ContactRepository
+) {
 
 }
