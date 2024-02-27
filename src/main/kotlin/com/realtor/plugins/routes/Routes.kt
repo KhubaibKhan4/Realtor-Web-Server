@@ -388,5 +388,45 @@ fun Route.contact(
             )
         }
     }
+    put("v1/contact/{id}") {
+        val id = call.parameters["id"] ?: return@put call.respondText(
+            text = "Invalid Id Found...",
+            status = HttpStatusCode.BadRequest
+        )
+        val updateInfo = call.receive<Parameters>()
+        val name = updateInfo["name"] ?: return@put call.respondText(
+            text = "Name Missing",
+            status = HttpStatusCode.BadRequest
+        )
+        val email = updateInfo["email"] ?: return@put call.respondText(
+            text = "Email Missing",
+            status = HttpStatusCode.BadRequest
+        )
+        val message = updateInfo["message"] ?: return@put call.respondText(
+            text = "Message Missing",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val contact = id.toInt().let {
+                db.updateContactById(id.toInt(), name = name,email = email, message = message)
+            }
+            if (contact == 1){
+                call.respondText(
+                    text = "Contact Updated Successfully $contact",
+                    status = HttpStatusCode.OK
+                )
+            }else{
+                call.respondText(
+                    text = "Error While Updating Data..",
+                    status = HttpStatusCode.OK
+                )
+            }
 
+        }catch (e: Throwable){
+            call.respondText(
+                text = "ERROR WHILE UPDATING DATA From SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 }
