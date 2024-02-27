@@ -321,4 +321,7 @@ fun Route.contact(
             )
         }
     }
+    get("v1/contact"){
+
+    }
 }
