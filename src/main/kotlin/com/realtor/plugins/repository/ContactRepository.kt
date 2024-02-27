@@ -5,6 +5,7 @@ import com.realtor.plugins.data.model.Contact
 import com.realtor.plugins.data.table.ContactTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ContactRepository : ContactDao {
@@ -22,7 +23,11 @@ class ContactRepository : ContactDao {
     }
 
     override suspend fun getAllContacts(): List<Contact>? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ContactTable.selectAll().mapNotNull {
+                rowToResult(it)
+            }
+        }
     }
 
     override suspend fun getContactById(id: Int): Contact? {
@@ -37,7 +42,7 @@ class ContactRepository : ContactDao {
         TODO("Not yet implemented")
     }
 
-    suspend fun rowToResult(row: ResultRow): Contact? {
+     fun rowToResult(row: ResultRow): Contact? {
         if (row == null) {
             return null
         } else {
