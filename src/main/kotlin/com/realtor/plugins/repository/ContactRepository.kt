@@ -3,10 +3,8 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.dao.ContactDao
 import com.realtor.plugins.data.model.Contact
 import com.realtor.plugins.data.table.ContactTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ContactRepository : ContactDao {
@@ -41,7 +39,9 @@ class ContactRepository : ContactDao {
     }
 
     override suspend fun deleteContactById(id: Int): Int? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ContactTable.deleteWhere { ContactTable.id.eq(id) }
+        }
     }
 
     override suspend fun updateContactById(id: Int, name: String, email: String, message: String): Int? {
