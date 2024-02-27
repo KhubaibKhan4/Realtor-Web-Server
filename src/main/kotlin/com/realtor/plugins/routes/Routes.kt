@@ -163,7 +163,7 @@ fun Route.houses(
         try {
             val houses = db.insert(title, price, type, size, rooms)
             houses?.id?.let {
-                call.respond(status = HttpStatusCode.OK,  "Data Uploaded Successfully $houses")
+                call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $houses")
             }
 
         } catch (e: Throwable) {
@@ -286,8 +286,39 @@ fun Route.houses(
 
 
 }
+
 fun Route.contact(
     db: ContactRepository
-){
+) {
 
+    post("v1/contact") {
+        val parameters = call.receive<Parameters>()
+        val name = parameters["name"] ?: return@post call.respondText(
+            text = "NAME MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        val email = parameters["email"] ?: return@post call.respondText(
+            text = "EMAIL MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        val message = parameters["message"] ?: return@post call.respondText(
+            text = "MESSAGE MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val contact = db.insert(name = name, email = email, message = message)
+            contact?.id?.let {
+                call.respondText(
+                    text = "Message Stored Successfully $contact",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE PUSHING DATA TO SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 }

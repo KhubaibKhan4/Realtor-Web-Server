@@ -8,11 +8,10 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ContactRepository : ContactDao {
-    override suspend fun insert(id: Int, name: String, email: String, message: String): Contact? {
+    override suspend fun insert(name: String, email: String, message: String): Contact? {
         var insertStatement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             insertStatement = ContactTable.insert { contact ->
-                contact[ContactTable.id] = id
                 contact[ContactTable.name] = name
                 contact[ContactTable.email] = email
                 contact[ContactTable.message] = message
