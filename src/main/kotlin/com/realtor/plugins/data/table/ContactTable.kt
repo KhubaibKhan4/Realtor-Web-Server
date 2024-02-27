@@ -1,5 +1,6 @@
 package com.realtor.plugins.data.table
 
-object ContactTable {
+import org.jetbrains.exposed.sql.Table
 
+object ContactTable : Table() {
 }
