@@ -1,6 +1,7 @@
 package com.realtor.plugins.repository
 
 import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.data.table.ContactTable
 import com.realtor.plugins.data.table.HousesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -17,6 +18,7 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.create(CategoriesTable)
             SchemaUtils.create(HousesTable)
+            SchemaUtils.create(ContactTable)
         }
     }
 
