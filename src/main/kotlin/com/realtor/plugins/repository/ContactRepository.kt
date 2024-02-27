@@ -2,10 +2,21 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.ContactDao
 import com.realtor.plugins.data.model.Contact
+import com.realtor.plugins.data.table.ContactTable
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
-class ContactRepository: ContactDao {
+class ContactRepository : ContactDao {
     override suspend fun insert(id: Int, name: String, email: String, message: String): Contact? {
-        TODO("Not yet implemented")
+        val insertStatement: InsertStatement<Number>? = null
+        DatabaseFactory.dbQuery {
+            insertStatement = ContactTable.insert { contact ->
+                contact[ContactTable.id] = id
+                contact[ContactTable.name] = name
+                contact[ContactTable.email] = email
+                contact[ContactTable.message] = message
+            }
+        }
     }
 
     override suspend fun getAllContacts(): List<Contact>? {
