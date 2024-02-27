@@ -13,4 +13,5 @@ interface ContactDao {
     suspend fun getAllContacts(): List<Contact>?
     suspend fun getContactById(id: Int): Contact?
     suspend fun deleteContactById(id: Int): Int?
+    suspend fun updateContactById(id: Int,name: String,email: String,message: String): Int?
 }
