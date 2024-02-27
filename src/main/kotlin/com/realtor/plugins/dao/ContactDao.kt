@@ -11,4 +11,5 @@ interface ContactDao {
     ): Contact?
 
     suspend fun getAllContacts(): List<Contact>?
+    suspend fun getContactById(id: Int): Contact?
 }
