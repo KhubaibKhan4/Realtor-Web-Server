@@ -321,7 +321,23 @@ fun Route.contact(
             )
         }
     }
-    get("v1/contact"){
+    get("v1/contact") {
+        try {
+            val contact = db.getAllContacts()
+            if (contact?.isNotEmpty() == true) {
+                call.respond(contact)
+            } else {
+                call.respondText(
+                    text = "No Contact Found...",
+                    status = HttpStatusCode.OK
+                )
+            }
 
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE GETTING DATA TO SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
     }
 }
