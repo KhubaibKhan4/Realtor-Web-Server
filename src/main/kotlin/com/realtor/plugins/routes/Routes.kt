@@ -489,5 +489,27 @@ fun Route.images(
             )
         }
     }
+    get("v1/images/{id}") {
+        val id = call.parameters["id"] ?: return@get call.respondText(
+            text = "Invalid ID Found",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val images = id.toInt().let {
+                db.getImagesById(id.toInt())
+            } ?: return@get call.respondText(
+                text = "ERROR While FETCHING IMAGE BY ID",
+                status = HttpStatusCode.BadRequest
+            )
+            images.let {
+                call.respond(status = HttpStatusCode.OK, images)
+            }
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE GETTING DATA FROM SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
