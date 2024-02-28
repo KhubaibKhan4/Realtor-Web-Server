@@ -468,7 +468,22 @@ fun Route.images(
         }
     }
     get("v1/images") {
-
+        try {
+            val images = db.getAllImages()
+            if (images?.isNotEmpty() == true) {
+                call.respond(status = HttpStatusCode.OK, images)
+            } else {
+                call.respondText(
+                    text = "NO Images Found",
+                    status = HttpStatusCode.OK
+                )
+            }
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE GETTING DATA FROM SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
     }
 
 }
