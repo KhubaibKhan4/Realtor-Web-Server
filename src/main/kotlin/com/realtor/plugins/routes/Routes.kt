@@ -534,5 +534,42 @@ fun Route.images(
             )
         }
     }
+    put("v1/images/{id}") {
+        val id = call.parameters["id"] ?: return@put call.respondText(
+            text = "Invalid ID Found...",
+            status = HttpStatusCode.BadRequest
+        )
+        val updateInfo = call.receive<Parameters>()
+        val imageUrl = updateInfo["imageUrl"] ?: return@put call.respondText(
+            text = "IMAGE URL MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        val description = updateInfo["description"] ?: return@put call.respondText(
+            text = "DESCRIPTION MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val images = id.toInt().let {
+                db.updateImagesById(id.toInt(), imageUrl, description)
+            }
+            if (images == 1){
+                call.respondText(
+                    text = "Images Data Updated Successfully...",
+                    status = HttpStatusCode.OK
+                )
+            }else{
+                call.respondText(
+                    text = "Error While Updating Data..",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE UPDATING DATA TO SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
