@@ -44,7 +44,13 @@ class ImagesRepository : ImagesDao {
     }
 
     override suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ImagesTable.update({ImagesTable.id.eq(id)}){image ->
+                image[ImagesTable.id] = id
+                image[ImagesTable.imageUrl] = imageUrl
+                image[ImagesTable.description] = description
+            }
+        }
     }
 
     fun rowToResult(row: ResultRow): Images? {
