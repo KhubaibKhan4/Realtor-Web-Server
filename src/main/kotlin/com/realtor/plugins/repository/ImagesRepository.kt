@@ -5,6 +5,7 @@ import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ImagesRepository : ImagesDao {
@@ -20,7 +21,12 @@ class ImagesRepository : ImagesDao {
     }
 
     override suspend fun getAllImages(): List<Images>? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ImagesTable.selectAll()
+                .mapNotNull {
+                    rowToResult(it)
+                }
+        }
     }
 
     override suspend fun getImagesById(id: Int): Images? {
