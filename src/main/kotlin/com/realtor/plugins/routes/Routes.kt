@@ -438,10 +438,7 @@ fun Route.images(
 
     post("v1/images") {
         val parameter = call.receive<Parameters>()
-        val id = parameter["id"] ?: return@post call.respondText(
-            text = "ID MISSING",
-            status = HttpStatusCode.BadRequest
-        )
+
         val imageUrl = parameter["imageUrl"] ?: return@post call.respondText(
             text = "IMAGE URL MISSING",
             status = HttpStatusCode.BadRequest
@@ -453,11 +450,8 @@ fun Route.images(
 
         try {
             val images = db.insert(imageUrl, description)
-            images?.id?.toInt()?.let {
-                call.respondText(
-                    text = "Data Uploaded Successfully...",
-                    status = HttpStatusCode.OK
-                )
+            images?.id?.let {
+                call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $images")
             }
 
         } catch (e: Throwable) {
