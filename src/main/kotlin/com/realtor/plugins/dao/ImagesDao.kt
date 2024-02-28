@@ -7,4 +7,5 @@ interface ImagesDao {
         imageUrl: String,
         description: String
     ): Images?
+    suspend fun getImagesById(id: Int): Images?
 }
