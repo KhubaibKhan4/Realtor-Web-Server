@@ -3,6 +3,7 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.data.table.CategoriesTable
 import com.realtor.plugins.data.table.ContactTable
 import com.realtor.plugins.data.table.HousesTable
+import com.realtor.plugins.data.table.ImagesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ object DatabaseFactory {
             SchemaUtils.create(CategoriesTable)
             SchemaUtils.create(HousesTable)
             SchemaUtils.create(ContactTable)
+            SchemaUtils.create(ImagesTable)
         }
     }
 
