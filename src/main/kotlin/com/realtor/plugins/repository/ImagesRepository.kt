@@ -5,8 +5,10 @@ import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import java.awt.Image
 
 class ImagesRepository : ImagesDao {
     override suspend fun insert(imageUrl: String, description: String): Images? {
@@ -30,14 +32,18 @@ class ImagesRepository : ImagesDao {
     }
 
     override suspend fun getImagesById(id: Int): Images? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ImagesTable.select { ImagesTable.id.eq(id) }
+                .map { rowToResult(it) }
+                .singleOrNull()
+        }
     }
 
     override suspend fun deleteImagesById(id: Int): Int? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateImagesById(id: Int,imageUrl: String,description: String): Int? {
+    override suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int? {
         TODO("Not yet implemented")
     }
 
