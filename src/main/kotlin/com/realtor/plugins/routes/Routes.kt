@@ -3,6 +3,7 @@ package com.realtor.plugins.routes
 import com.realtor.plugins.repository.CategoriesRepository
 import com.realtor.plugins.repository.ContactRepository
 import com.realtor.plugins.repository.HousesRepository
+import com.realtor.plugins.repository.ImagesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -408,25 +409,32 @@ fun Route.contact(
         )
         try {
             val contact = id.toInt().let {
-                db.updateContactById(id.toInt(), name = name,email = email, message = message)
+                db.updateContactById(id.toInt(), name = name, email = email, message = message)
             }
-            if (contact == 1){
+            if (contact == 1) {
                 call.respondText(
                     text = "Contact Updated Successfully $contact",
                     status = HttpStatusCode.OK
                 )
-            }else{
+            } else {
                 call.respondText(
                     text = "Error While Updating Data..",
                     status = HttpStatusCode.OK
                 )
             }
 
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             call.respondText(
                 text = "ERROR WHILE UPDATING DATA From SERVER ${e.message}",
                 status = HttpStatusCode.Unauthorized
             )
         }
     }
+}
+
+fun Route.images(
+    db: ImagesRepository
+) {
+
+
 }
