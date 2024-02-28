@@ -4,10 +4,19 @@ import com.realtor.plugins.dao.ImagesDao
 import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ImagesRepository : ImagesDao {
     override suspend fun insert(imageUrl: String, description: String): Images? {
-        TODO("Not yet implemented")
+        val statement: InsertStatement<Number>? = null
+        DatabaseFactory.dbQuery {
+            ImagesTable.insert { image ->
+                image[ImagesTable.imageUrl] = imageUrl
+                image[ImagesTable.description] = description
+            }
+        }
+        return statement?.resultedValues?.get(0)?.let { rowToResult(it) }
     }
 
     override suspend fun getAllImages(): List<Images>? {
