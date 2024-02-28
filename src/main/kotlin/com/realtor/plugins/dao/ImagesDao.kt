@@ -10,5 +10,5 @@ interface ImagesDao {
     suspend fun getAllImages(): List<Images>?
     suspend fun getImagesById(id: Int): Images?
     suspend fun deleteImagesById(id: Int): Int?
-    suspend fun updateImagesById(id: Int): Int?
+    suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int?
 }
