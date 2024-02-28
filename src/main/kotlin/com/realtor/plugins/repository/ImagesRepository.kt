@@ -5,7 +5,6 @@ import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
@@ -38,7 +37,7 @@ class ImagesRepository : ImagesDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateImagesById(id: Int): Int? {
+    override suspend fun updateImagesById(id: Int,imageUrl: String,description: String): Int? {
         TODO("Not yet implemented")
     }
 
@@ -47,6 +46,7 @@ class ImagesRepository : ImagesDao {
             return null
         } else {
             return Images(
+                id = row[ImagesTable.id],
                 imageUrl = row[ImagesTable.imageUrl],
                 description = row[ImagesTable.description]
             )
