@@ -3,10 +3,8 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.dao.ImagesDao
 import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.ImagesTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import java.awt.Image
 
@@ -40,7 +38,9 @@ class ImagesRepository : ImagesDao {
     }
 
     override suspend fun deleteImagesById(id: Int): Int? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            ImagesTable.deleteWhere { ImagesTable.id.eq(id) }
+        }
     }
 
     override suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int? {
