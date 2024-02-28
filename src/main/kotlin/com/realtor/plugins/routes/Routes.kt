@@ -507,5 +507,32 @@ fun Route.images(
             )
         }
     }
+    delete("v1/images/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val image = id?.toInt()?.let {
+                db.deleteImagesById(id.toInt())
+            } ?: return@delete call.respondText(
+                text = "Invalid ID Found...",
+                status = HttpStatusCode.BadRequest
+            )
+            if (image == 1) {
+                call.respondText(
+                    text = "Image with ID #$id Deleted Successfully"
+                )
+            } else {
+                call.respondText(
+                    text = "Error While Deleting Images...",
+                    status = HttpStatusCode.BadRequest
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE DELETING DATA FROM SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
