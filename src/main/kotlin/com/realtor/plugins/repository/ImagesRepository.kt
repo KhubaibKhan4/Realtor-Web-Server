@@ -6,18 +6,17 @@ import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import java.awt.Image
 
 class ImagesRepository : ImagesDao {
     override suspend fun insert(imageUrl: String, description: String): Images? {
-        val statement: InsertStatement<Number>? = null
+        var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
-            ImagesTable.insert { image ->
+           statement= ImagesTable.insert { image ->
                 image[ImagesTable.imageUrl] = imageUrl
                 image[ImagesTable.description] = description
             }
         }
-        return statement?.resultedValues?.get(0)?.let { rowToResult(it) }
+        return rowToResult(statement?.resultedValues?.get(0)!!)
     }
 
     override suspend fun getAllImages(): List<Images>? {
