@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Images(
     val imageUrl: String,
-    val contentDescription: String
+    val description: String,
 )
