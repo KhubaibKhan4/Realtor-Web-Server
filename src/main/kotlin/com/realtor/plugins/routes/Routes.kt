@@ -436,5 +436,36 @@ fun Route.images(
     db: ImagesRepository
 ) {
 
+    post("v1/images") {
+        val parameter = call.receive<Parameters>()
+        val id = parameter["id"] ?: return@post call.respondText(
+            text = "ID MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        val imageUrl = parameter["imageUrl"] ?: return@post call.respondText(
+            text = "IMAGE URL MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+        val description = parameter["description"] ?: return@post call.respondText(
+            text = "DESCRIPTION MISSING",
+            status = HttpStatusCode.BadRequest
+        )
+
+        try {
+            val images = db.insert(imageUrl, description)
+            images?.id?.toInt()?.let {
+                call.respondText(
+                    text = "Data Uploaded Successfully...",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "ERROR WHILE PUSHING DATA TO SERVER ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
