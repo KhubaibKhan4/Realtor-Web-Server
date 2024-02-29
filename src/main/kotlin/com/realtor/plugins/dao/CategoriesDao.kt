@@ -13,5 +13,5 @@ interface CategoriesDao {
     suspend fun getCategoryById(id: Int): Categories?
     suspend fun deleteCategoryById(id: Int): Int?
     suspend fun updateCategory(id: Int, name: String, priority: String): Int
-    suspend fun getCategoryWithHouses(): List<CategoryWithHouses>?
+    suspend fun getCategoryWithHouses(): List<CategoryWithHouses>
 }
