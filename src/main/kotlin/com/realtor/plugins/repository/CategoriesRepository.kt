@@ -2,7 +2,6 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.CategoriesDao
 import com.realtor.plugins.data.model.Categories
-import com.realtor.plugins.data.model.CategoryWithHouses
 import com.realtor.plugins.data.model.Houses
 import com.realtor.plugins.data.table.CategoriesTable
 import com.realtor.plugins.data.table.HousesTable
@@ -52,28 +51,6 @@ class CategoriesRepository : CategoriesDao {
             }
         }
 
-    override suspend fun getCategoryWithHouses(): List<CategoryWithHouses> {
-        return DatabaseFactory.dbQuery {
-            CategoriesTable.selectAll().map {categoryRow ->
-                val category = rowToCategory(categoryRow)
-                val houses = HousesTable.select { HousesTable.categoryId eq category?.id!! }.map {houseRow ->
-                    rowToHouse(houseRow)
-                }
-                CategoryWithHouses(category!!,houses)
-            }
-        }
-    }
-    private fun rowToHouse(row: ResultRow): Houses {
-        return Houses(
-            id = row[HousesTable.id],
-            categoryId = row[HousesTable.categoryId],
-            title = row[HousesTable.title],
-            price = row[HousesTable.price],
-            type = row[HousesTable.type],
-            size = row[HousesTable.size],
-            rooms = row[HousesTable.rooms]
-        )
-    }
     private fun rowToCategory(row: ResultRow): Categories? {
         if (row == null) {
             return null
