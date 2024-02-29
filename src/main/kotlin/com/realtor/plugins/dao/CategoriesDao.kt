@@ -1,6 +1,7 @@
 package com.realtor.plugins.dao
 
 import com.realtor.plugins.data.model.Categories
+import com.realtor.plugins.data.model.CategoryWithHouses
 
 interface CategoriesDao {
     suspend fun insert(
@@ -12,4 +13,5 @@ interface CategoriesDao {
     suspend fun getCategoryById(id: Int): Categories?
     suspend fun deleteCategoryById(id: Int): Int?
     suspend fun updateCategory(id: Int, name: String, priority: String): Int
+    suspend fun getCategoryWithHouses(): List<CategoryWithHouses>?
 }
