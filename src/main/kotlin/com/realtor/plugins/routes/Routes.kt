@@ -6,8 +6,6 @@ import com.realtor.plugins.repository.HousesRepository
 import com.realtor.plugins.repository.ImagesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.locations.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -135,7 +133,8 @@ fun Route.category(
 }
 
 fun Route.houses(
-    db: HousesRepository
+    db: HousesRepository,
+    imagesDb: ImagesRepository
 ) {
     post("v1/house") {
         val parameters = call.receive<Parameters>()
@@ -544,12 +543,12 @@ fun Route.images(
             val images = id.toInt().let {
                 db.updateImagesById(id.toInt(), imageUrl, description)
             }
-            if (images == 1){
+            if (images == 1) {
                 call.respondText(
                     text = "Images Data Updated Successfully...",
                     status = HttpStatusCode.OK
                 )
-            }else{
+            } else {
                 call.respondText(
                     text = "Error While Updating Data..",
                     status = HttpStatusCode.OK
