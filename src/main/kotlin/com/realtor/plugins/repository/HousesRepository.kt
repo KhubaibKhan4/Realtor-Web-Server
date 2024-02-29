@@ -137,16 +137,89 @@ class HousesRepository : HousesDao {
         price: String,
         type: String,
         size: String,
-        rooms: String
+        rooms: String,
+        address: String,
+        mls: String,
+        county: String,
+        city: String,
+        area: Long,
+        neighborhood: String,
+        zip: Long,
+        style: String,
+        builtYear: Long,
+        taxes: String,
+        description: String,
+        dataSource: String,
+        priceHistoryDate: String,
+        priceHistoryDetail: String,
+        restrictions: String,
+        housingOlderPersonsAct: String,
+        foreclosure: Boolean,
+        views: Boolean,
+        short_Sale: Boolean,
+        new_construction: Boolean,
+        adult: Boolean,
+        leaseToOwn: Boolean,
+        noHoaFees: Boolean,
+        furnished: Boolean,
+        pets: Boolean,
+        primaryOnMain: Boolean,
+        aitConditioning: Boolean,
+        sellerFinance: Boolean,
+        green: Boolean,
+        fixedUpper: Boolean,
+        horse: Boolean,
+        golf: Boolean,
+        fireplace: Boolean,
+        deck: Boolean,
+        garage: Boolean,
+        basement: Boolean,
+        pool: Boolean
     ): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.update({ HousesTable.id.eq(id) }) { house ->
-                house[HousesTable.id] = id
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
                 house[HousesTable.size] = size
                 house[HousesTable.rooms] = rooms
+                house[HousesTable.address] = address
+                house[HousesTable.mls] = mls
+                house[HousesTable.county] = county
+                house[HousesTable.city] = city
+                house[HousesTable.area] = area
+                house[HousesTable.neighborhood] = neighborhood
+                house[HousesTable.zip] = zip
+                house[HousesTable.style] = style
+                house[HousesTable.builtYear] = builtYear
+                house[HousesTable.taxes] = taxes
+                house[HousesTable.description] = description
+                house[HousesTable.dataSource] = dataSource
+                house[HousesTable.priceHistoryDate] = priceHistoryDate
+                house[HousesTable.priceHistoryDetail] = priceHistoryDetail
+                house[HousesTable.restrictions] = restrictions
+                house[HousesTable.housingOlderPersonsAct] = housingOlderPersonsAct
+                house[HousesTable.foreclosure] = foreclosure
+                house[HousesTable.views] = views
+                house[HousesTable.shortSale] = short_Sale
+                house[HousesTable.newConstruction] = new_construction
+                house[HousesTable.adult] = adult
+                house[HousesTable.leaseToOwn] = leaseToOwn
+                house[HousesTable.noHoaFees] = noHoaFees
+                house[HousesTable.furnished] = furnished
+                house[HousesTable.pets] = pets
+                house[HousesTable.primaryOnMain] = primaryOnMain
+                house[HousesTable.airConditioning] = aitConditioning
+                house[HousesTable.sellerFinance] = sellerFinance
+                house[HousesTable.green] = green
+                house[HousesTable.fixedUpper] = fixedUpper
+                house[HousesTable.horse] = horse
+                house[HousesTable.golf] = golf
+                house[HousesTable.fireplace] = fireplace
+                house[HousesTable.deck] = deck
+                house[HousesTable.garage] = garage
+                house[HousesTable.basement] = basement
+                house[HousesTable.pool] = pool
             }
         }
     }
