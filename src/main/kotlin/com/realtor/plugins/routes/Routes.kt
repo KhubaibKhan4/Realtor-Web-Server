@@ -37,14 +37,6 @@ fun Route.category(
             call.respondText("Get Error While Posting Data to Server: ${e.message}")
         }
     }
-    get("v1/categoryWithHouses"){
-        try {
-            val categoriesWithHouses = db.getCategoryWithHouses()
-            call.respond(HttpStatusCode.OK, categoriesWithHouses)
-        } catch (e: Throwable) {
-            call.respond(HttpStatusCode.InternalServerError, "Error while fetching categories with houses")
-        }
-    }
 
     get("v1/category") {
         try {
