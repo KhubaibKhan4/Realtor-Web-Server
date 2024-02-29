@@ -24,7 +24,7 @@ fun Application.configureRouting() {
     val imagesDb = ImagesRepository()
     routing {
         category(db)
-        houses(housesDb,imagesDb)
+        houses(housesDb)
         contact(contactDb)
         images(imagesDb)
     }

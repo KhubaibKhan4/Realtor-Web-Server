@@ -134,7 +134,6 @@ fun Route.category(
 
 fun Route.houses(
     db: HousesRepository,
-    imagesDb: ImagesRepository
 ) {
     post("v1/house") {
         val parameters = call.receive<Parameters>()
