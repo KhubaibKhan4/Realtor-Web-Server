@@ -160,19 +160,213 @@ fun Route.houses(
             status = HttpStatusCode.BadRequest
         )
 
+        val address = parameters["address"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val mls = parameters["mls"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val county = parameters["county"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val city = parameters["city"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val area = parameters["area"]?.toLongOrNull() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val neighborhood = parameters["neighborhood"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val zip = parameters["zip"]?.toLongOrNull() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val style = parameters["style"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val builtYear = parameters["builtYear"]?.toLongOrNull() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val taxes = parameters["taxes"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val description = parameters["description"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val dataSource = parameters["dataSource"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val priceHistoryDate = parameters["priceHistoryDate"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val priceHistoryDetail = parameters["priceHistoryDetail"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val restrictions = parameters["restrictions"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val housingOlderPersonsAct = parameters["housingOlderPersonsAct"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val foreclosure = parameters["foreclosure"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val views = parameters["views"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val shortSale = parameters["shortSale"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val newConstruction = parameters["newConstruction"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val adult = parameters["adult"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val leaseToOwn = parameters["leaseToOwn"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val noHoaFees = parameters["noHoaFees"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val furnished = parameters["furnished"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val pets = parameters["pets"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val primaryOnMain = parameters["primaryOnMain"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val airConditioning = parameters["airConditioning"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val sellerFinance = parameters["sellerFinance"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val green = parameters["green"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val fixedUpper = parameters["fixedUpper"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val horse = parameters["horse"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val golf = parameters["golf"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val fireplace = parameters["fireplace"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val deck = parameters["deck"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val garage = parameters["garage"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val basement = parameters["basement"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val pool = parameters["pool"]?.toBoolean() ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+
         try {
-            val houses = db.insert(title, price, type, size, rooms)
+            val houses = db.insert(
+                title = title,
+                price = price,
+                type = type,
+                size = size,
+                rooms = rooms,
+                address = address,
+                mls = mls,
+                county = county,
+                city = city,
+                area = area,
+                neighborhood = neighborhood,
+                zip = zip,
+                style = style,
+                builtYear = builtYear,
+                taxes = taxes,
+                description = description,
+                dataSource = dataSource,
+                priceHistoryDate = priceHistoryDate,
+                priceHistoryDetail = priceHistoryDetail,
+                restrictions = restrictions,
+                housingOlderPersonsAct = housingOlderPersonsAct,
+                foreclosure = foreclosure,
+                views = views,
+                short_Sale = shortSale,
+                new_construction = newConstruction,
+                adult = adult,
+                leaseToOwn = leaseToOwn,
+                noHoaFees = noHoaFees,
+                furnished = furnished,
+                pets = pets,
+                primaryOnMain = primaryOnMain,
+                aitConditioning = airConditioning,
+                sellerFinance = sellerFinance,
+                green = green,
+                fixedUpper = fixedUpper,
+                horse = horse,
+                golf = golf,
+                fireplace = fireplace,
+                deck = deck,
+                garage = garage,
+                basement = basement,
+                pool = pool
+            )
+
             houses?.id?.let {
-                call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $houses")
+                call.respond(HttpStatusCode.OK, "Data Uploaded Successfully $houses")
             }
 
         } catch (e: Throwable) {
-            call.respondText(
-                text = "Error While Pushing Data to Server",
-                status = HttpStatusCode.Unauthorized
+            call.respond(
+                HttpStatusCode.Unauthorized,
+                "Error While Pushing Data to Server: ${e.message}"
             )
         }
     }
+
 
     get("v1/house") {
         try {
