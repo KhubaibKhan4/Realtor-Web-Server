@@ -284,7 +284,11 @@ fun Route.houses(
             )
         }
     }
+}
 
+fun Route.contact(
+    db: ContactRepository
+) {
 
 }
 
