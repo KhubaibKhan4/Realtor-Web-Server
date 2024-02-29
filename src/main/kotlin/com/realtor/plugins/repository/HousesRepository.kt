@@ -224,17 +224,52 @@ class HousesRepository : HousesDao {
         }
     }
 
-    fun rowToResult(row: ResultRow): Houses? {
-        if (row == null) {
-            return null
-        } else {
-            return Houses(
-                id = row[HousesTable.id],
+    private fun rowToResult(row: ResultRow): Houses? {
+        return row[HousesTable.id]?.let { id ->
+            Houses(
+                id = id,
                 title = row[HousesTable.title],
                 price = row[HousesTable.price],
                 type = row[HousesTable.type],
                 size = row[HousesTable.size],
                 rooms = row[HousesTable.rooms],
+                address = row[HousesTable.address],
+                mls = row[HousesTable.mls],
+                county = row[HousesTable.county],
+                city = row[HousesTable.city],
+                area = row[HousesTable.area],
+                neighborhood = row[HousesTable.neighborhood],
+                zip = row[HousesTable.zip],
+                style = row[HousesTable.style],
+                builtYear = row[HousesTable.builtYear],
+                taxes = row[HousesTable.taxes],
+                description = row[HousesTable.description],
+                dataSource = row[HousesTable.dataSource],
+                priceHistoryDate = row[HousesTable.priceHistoryDate],
+                priceHistoryDetail = row[HousesTable.priceHistoryDetail],
+                restrictions = row[HousesTable.restrictions],
+                housingOlderPersonsAct = row[HousesTable.housingOlderPersonsAct],
+                foreclosure = row[HousesTable.foreclosure],
+                views = row[HousesTable.views],
+                short_Sale = row[HousesTable.shortSale],
+                new_construction = row[HousesTable.newConstruction],
+                adult = row[HousesTable.adult],
+                leaseToOwn = row[HousesTable.leaseToOwn],
+                noHoaFees = row[HousesTable.noHoaFees],
+                furnished = row[HousesTable.furnished],
+                pets = row[HousesTable.pets],
+                primaryOnMain = row[HousesTable.primaryOnMain],
+                aitConditioning = row[HousesTable.airConditioning],
+                sellerFinance = row[HousesTable.sellerFinance],
+                green = row[HousesTable.green],
+                fixedUpper = row[HousesTable.fixedUpper],
+                horse = row[HousesTable.horse],
+                golf = row[HousesTable.golf],
+                fireplace = row[HousesTable.fireplace],
+                deck = row[HousesTable.deck],
+                garage = row[HousesTable.garage],
+                basement = row[HousesTable.basement],
+                pool = row[HousesTable.pool]
             )
         }
     }
