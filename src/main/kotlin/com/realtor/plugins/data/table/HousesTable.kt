@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object HousesTable : Table() {
     val id: Column<Int> = integer("id").autoIncrement()
+    val categoryId: Column<Int> = integer("category_id").references(CategoriesTable.id)
     val title: Column<String> = varchar("title", length = 1500)
     val price: Column<String> = varchar("price", length = 1500)
     val type: Column<String> = varchar("type", length = 1500)
