@@ -10,4 +10,5 @@ data class Houses(
     val type: String,
     val size: String,
     val rooms: String,
+    val images: List<Images>
 )
