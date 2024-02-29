@@ -11,7 +11,7 @@ class ImagesRepository : ImagesDao {
     override suspend fun insert(imageUrl: String, description: String): Images? {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
-           statement= ImagesTable.insert { image ->
+            statement = ImagesTable.insert { image ->
                 image[ImagesTable.imageUrl] = imageUrl
                 image[ImagesTable.description] = description
             }
@@ -44,7 +44,7 @@ class ImagesRepository : ImagesDao {
 
     override suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int? {
         return DatabaseFactory.dbQuery {
-            ImagesTable.update({ImagesTable.id.eq(id)}){image ->
+            ImagesTable.update({ ImagesTable.id.eq(id) }) { image ->
                 image[ImagesTable.id] = id
                 image[ImagesTable.imageUrl] = imageUrl
                 image[ImagesTable.description] = description
