@@ -290,12 +290,6 @@ fun Route.contact(
     db: ContactRepository
 ) {
 
-}
-
-fun Route.contact(
-    db: ContactRepository
-) {
-
     post("v1/contact") {
         val parameters = call.receive<Parameters>()
         val name = parameters["name"] ?: return@post call.respondText(
