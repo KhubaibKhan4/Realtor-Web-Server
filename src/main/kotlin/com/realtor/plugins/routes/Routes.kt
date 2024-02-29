@@ -434,6 +434,7 @@ fun Route.houses(
             text = "Invalid Id Found",
             status = HttpStatusCode.BadRequest
         )
+
         val updateInfo = call.receive<Parameters>()
         val title = updateInfo["title"] ?: return@put call.respondText(
             text = "MISSING Title",
@@ -455,10 +456,169 @@ fun Route.houses(
             text = "MISSING Rooms",
             status = HttpStatusCode.BadRequest
         )
+
+        val address = updateInfo["address"] ?: return@put call.respondText(
+            text = "MISSING Address",
+            status = HttpStatusCode.BadRequest
+        )
+        val mls = updateInfo["mls"] ?: return@put call.respondText(
+            text = "MISSING MLS",
+            status = HttpStatusCode.BadRequest
+        )
+        val county = updateInfo["county"] ?: return@put call.respondText(
+            text = "MISSING County",
+            status = HttpStatusCode.BadRequest
+        )
+        val city = updateInfo["city"] ?: return@put call.respondText(
+            text = "MISSING City",
+            status = HttpStatusCode.BadRequest
+        )
+        val area = updateInfo["area"]?.toLongOrNull() ?: return@put call.respondText(
+            text = "MISSING Area",
+            status = HttpStatusCode.BadRequest
+        )
+        val neighborhood = updateInfo["neighborhood"] ?: return@put call.respondText(
+            text = "MISSING Neighborhood",
+            status = HttpStatusCode.BadRequest
+        )
+        val zip = updateInfo["zip"]?.toLongOrNull() ?: return@put call.respondText(
+            text = "MISSING ZIP",
+            status = HttpStatusCode.BadRequest
+        )
+        val style = updateInfo["style"] ?: return@put call.respondText(
+            text = "MISSING Style",
+            status = HttpStatusCode.BadRequest
+        )
+        val builtYear = updateInfo["builtYear"]?.toLongOrNull() ?: return@put call.respondText(
+            text = "MISSING Built Year",
+            status = HttpStatusCode.BadRequest
+        )
+        val taxes = updateInfo["taxes"] ?: return@put call.respondText(
+            text = "MISSING Taxes",
+            status = HttpStatusCode.BadRequest
+        )
+        val description = updateInfo["description"] ?: return@put call.respondText(
+            text = "MISSING Description",
+            status = HttpStatusCode.BadRequest
+        )
+        val dataSource = updateInfo["dataSource"] ?: return@put call.respondText(
+            text = "MISSING Data Source",
+            status = HttpStatusCode.BadRequest
+        )
+        val priceHistoryDate = updateInfo["priceHistoryDate"] ?: return@put call.respondText(
+            text = "MISSING Price History Date",
+            status = HttpStatusCode.BadRequest
+        )
+        val priceHistoryDetail = updateInfo["priceHistoryDetail"] ?: return@put call.respondText(
+            text = "MISSING Price History Detail",
+            status = HttpStatusCode.BadRequest
+        )
+        val restrictions = updateInfo["restrictions"] ?: return@put call.respondText(
+            text = "MISSING Restrictions",
+            status = HttpStatusCode.BadRequest
+        )
+        val housingOlderPersonsAct = updateInfo["housingOlderPersonsAct"] ?: return@put call.respondText(
+            text = "MISSING Housing Older Persons Act",
+            status = HttpStatusCode.BadRequest
+        )
+        val foreclosure = updateInfo["foreclosure"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Foreclosure",
+            status = HttpStatusCode.BadRequest
+        )
+        val views = updateInfo["views"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Views",
+            status = HttpStatusCode.BadRequest
+        )
+        val shortSale = updateInfo["shortSale"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Short Sale",
+            status = HttpStatusCode.BadRequest
+        )
+        val newConstruction = updateInfo["newConstruction"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING New Construction",
+            status = HttpStatusCode.BadRequest
+        )
+        val adult = updateInfo["adult"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Adult",
+            status = HttpStatusCode.BadRequest
+        )
+        val leaseToOwn = updateInfo["leaseToOwn"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Lease to Own",
+            status = HttpStatusCode.BadRequest
+        )
+        val noHoaFees = updateInfo["noHoaFees"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING No HOA Fees",
+            status = HttpStatusCode.BadRequest
+        )
+        val furnished = updateInfo["furnished"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Furnished",
+            status = HttpStatusCode.BadRequest
+        )
+        val pets = updateInfo["pets"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Pets",
+            status = HttpStatusCode.BadRequest
+        )
+        val primaryOnMain = updateInfo["primaryOnMain"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Primary on Main",
+            status = HttpStatusCode.BadRequest
+        )
+        val airConditioning = updateInfo["airConditioning"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Air Conditioning",
+            status = HttpStatusCode.BadRequest
+        )
+        val sellerFinance = updateInfo["sellerFinance"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Seller Finance",
+            status = HttpStatusCode.BadRequest
+        )
+        val green = updateInfo["green"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Green",
+            status = HttpStatusCode.BadRequest
+        )
+        val fixedUpper = updateInfo["fixedUpper"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Fixed Upper",
+            status = HttpStatusCode.BadRequest
+        )
+        val horse = updateInfo["horse"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Horse",
+            status = HttpStatusCode.BadRequest
+        )
+        val golf = updateInfo["golf"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Golf",
+            status = HttpStatusCode.BadRequest
+        )
+        val fireplace = updateInfo["fireplace"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Fireplace",
+            status = HttpStatusCode.BadRequest
+        )
+        val deck = updateInfo["deck"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Deck",
+            status = HttpStatusCode.BadRequest
+        )
+        val garage = updateInfo["garage"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Garage",
+            status = HttpStatusCode.BadRequest
+        )
+        val basement = updateInfo["basement"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Basement",
+            status = HttpStatusCode.BadRequest
+        )
+        val pool = updateInfo["pool"]?.toBoolean() ?: return@put call.respondText(
+            text = "MISSING Pool",
+            status = HttpStatusCode.BadRequest
+        )
+
         try {
             val result = id.toInt().let {
-                db.updateHouseById(id.toInt(), title, price, type, size, rooms)
+                db.updateHouseById(
+                    id.toInt(), title, price, type, size, rooms,
+                    address, mls, county, city, area, neighborhood, zip,
+                    style, builtYear, taxes, description, dataSource, priceHistoryDate,
+                    priceHistoryDetail, restrictions, housingOlderPersonsAct, foreclosure,
+                    views, shortSale, newConstruction, adult, leaseToOwn, noHoaFees,
+                    furnished, pets, primaryOnMain, airConditioning, sellerFinance, green,
+                    fixedUpper, horse, golf, fireplace, deck, garage, basement, pool
+                )
             }
+
             if (result == 1) {
                 call.respondText(
                     text = "Data Updated Successfully",
@@ -470,13 +630,14 @@ fun Route.houses(
                     status = HttpStatusCode.OK
                 )
             }
-
         } catch (e: Throwable) {
             call.respondText(
-                text = "Error While Updating Data from Server ${e.message}", status = HttpStatusCode.BadRequest
+                text = "Error While Updating Data from Server ${e.message}",
+                status = HttpStatusCode.BadRequest
             )
         }
     }
+
 }
 
 fun Route.contact(
