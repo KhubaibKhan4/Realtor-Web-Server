@@ -10,6 +10,5 @@ object HousesTable : Table() {
     val type: Column<String> = varchar("type", length = 1500)
     val size: Column<String> = varchar("size", length = 1500)
     val rooms: Column<String> = varchar("rooms", length = 1000)
-
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }

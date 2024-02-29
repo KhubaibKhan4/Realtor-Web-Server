@@ -2,7 +2,9 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.HousesDao
 import com.realtor.plugins.data.model.Houses
+import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.HousesTable
+import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -79,7 +81,7 @@ class HousesRepository : HousesDao {
                 price = row[HousesTable.price],
                 type = row[HousesTable.type],
                 size = row[HousesTable.size],
-                rooms = row[HousesTable.rooms]
+                rooms = row[HousesTable.rooms],
             )
         }
     }
