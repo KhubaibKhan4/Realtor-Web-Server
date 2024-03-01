@@ -1,4 +1,4 @@
-package com.realtor.plugins.repository
+package com.realtor.plugins.repository.house
 
 import com.realtor.plugins.data.model.HouseResponse
 

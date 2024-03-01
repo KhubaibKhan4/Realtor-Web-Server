@@ -17,7 +17,7 @@ data class House(
 @Serializable
 data class HouseResponse(
     val success: Boolean,
-    val house: House? = null,
+    val houseId: Long? = null,
     val message: String? = null
 )
 

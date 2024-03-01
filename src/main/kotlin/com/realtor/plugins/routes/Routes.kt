@@ -1,19 +1,13 @@
 package com.realtor.plugins.routes
 
-import com.realtor.plugins.data.table.HousesTable
-import com.realtor.plugins.data.table.ImagesTable
-import com.realtor.plugins.repository.CategoriesRepository
-import com.realtor.plugins.repository.ContactRepository
-import com.realtor.plugins.repository.HousesRepository
-import com.realtor.plugins.repository.ImagesRepository
+import com.realtor.plugins.repository.*
+import com.realtor.plugins.repository.house.HouseRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
-import org.jetbrains.exposed.sql.select
 
 fun Route.category(
     db: CategoriesRepository
@@ -921,4 +915,45 @@ fun Route.images(
         }
     }
 
+}
+fun Route.houseRouting(
+    houseRepository: HouseRepository
+){
+    authenticate {
+        route("/house") {
+            post("/create") {
+                val parameters = call.receiveParameters()
+                val title = parameters["title"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Title parameter missing")
+                val imageUrl = parameters["imageUrl"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Image URL parameter missing")
+                val address = parameters["address"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Address parameter missing")
+                val type = parameters["type"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Type parameter missing")
+                val size = parameters["size"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Size parameter missing")
+                val rooms = parameters["rooms"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Rooms parameter missing")
+                val categoryId = parameters["categoryId"]?.toIntOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest, "Category ID parameter missing")
+
+                val result = houseRepository.createHouse(title, imageUrl, address, type, size, rooms, categoryId)
+                call.respond(HttpStatusCode.OK, result)
+            }
+
+            get("/{houseId}") {
+                try {
+                    val houseId = call.parameters["houseId"]?.toLongOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid house ID")
+                    val house = houseRepository.getHouse(houseId) ?: return@get call.respond(HttpStatusCode.NotFound, "House not found")
+                    call.respond(HttpStatusCode.OK, house)
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+                }
+            }
+
+            delete("/{houseId}") {
+                try {
+                    val houseId = call.parameters["houseId"]?.toLongOrNull() ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid house ID")
+                    val result = houseRepository.deleteHouse(houseId)
+                    call.respond(HttpStatusCode.OK, result)
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+                }
+            }
+        }
+    }
 }
