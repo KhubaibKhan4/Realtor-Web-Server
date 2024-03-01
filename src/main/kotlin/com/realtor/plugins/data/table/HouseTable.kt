@@ -16,3 +16,14 @@ object HouseTable : Table(name = "house") {
     val categoryId =  integer(name = "user_id").references(ref = CategoriesTable.id, onDelete = ReferenceOption.CASCADE)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)
 }
+data class HouseRow(
+    val houseId: Long,
+    val title: String,
+    val imageUrl: String,
+    val address: String,
+    val type: String,
+    val size: String,
+    val rooms: String,
+    val categoryId: Int,
+    val createdAt: String
+)
