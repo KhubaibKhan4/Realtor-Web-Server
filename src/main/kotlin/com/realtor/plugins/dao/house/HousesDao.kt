@@ -50,6 +50,8 @@ interface HousesDao {
 
     suspend fun getHouses(): List<Houses>?
     suspend fun getHousesById(id: Long): Houses?
+    suspend fun getHouseByCategoryId(id: Long): Houses?
+    suspend fun deleteHouseByCategoryId(id: Long): Int?
     suspend fun deleteHouseById(id: Long): Int?
     suspend fun updateHouseById(
         id: Long,
