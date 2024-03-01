@@ -121,6 +121,20 @@ class HousesRepository : HousesDao {
         }
     }
 
+    override suspend fun getHouseByCategoryId(id: Long): Houses? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryId.eq(id)
+            }.map {
+                rowToResult(it)
+            }.singleOrNull()
+        }
+    }
+
+    override suspend fun deleteHouseByCategoryId(id: Long): Int? {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteHouseById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.deleteWhere {
@@ -226,6 +240,8 @@ class HousesRepository : HousesDao {
         return row[HousesTable.id]?.let { id ->
             Houses(
                 id = id,
+                categoryId = row[HousesTable.categoryId],
+                categoryTitle = row[HousesTable.categoryTitle],
                 title = row[HousesTable.title],
                 price = row[HousesTable.price],
                 type = row[HousesTable.type],
