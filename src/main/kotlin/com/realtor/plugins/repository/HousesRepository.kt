@@ -132,7 +132,11 @@ class HousesRepository : HousesDao {
     }
 
     override suspend fun deleteHouseByCategoryId(id: Long): Int? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            HousesTable.deleteWhere {
+                HousesTable.categoryId.eq(id)
+            }
+        }
     }
 
     override suspend fun deleteHouseById(id: Long): Int? {
