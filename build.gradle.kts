@@ -51,4 +51,5 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("com.zaxxer:HikariCP:$hikaricp_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
 }
