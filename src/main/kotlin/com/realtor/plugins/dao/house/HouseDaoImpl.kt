@@ -43,7 +43,12 @@ class HouseDaoImpl : HouseDao {
     }
 
     override suspend fun getHouse(houseId: Long): HouseRow? {
-        TODO("Not yet implemented")
+        return dbQuery {
+            HouseTable
+                .select { HouseTable.houseId eq houseId }
+                .singleOrNull()
+                ?.let { toHouseRow(it) }
+        }
     }
 
     override suspend fun updateHouse(
