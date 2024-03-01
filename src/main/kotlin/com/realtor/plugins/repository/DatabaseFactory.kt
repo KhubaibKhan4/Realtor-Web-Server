@@ -17,7 +17,7 @@ object DatabaseFactory {
     fun init() {
         Database.connect(hikari())
         transaction {
-            SchemaUtils.create(CategoriesTable,HousesTable,ContactTable,ImagesTable)
+            SchemaUtils.create(CategoriesTable, HousesTable, ContactTable, ImagesTable)
         }
     }
 
@@ -32,7 +32,7 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    suspend fun <T> dbQuery(block: () -> Unit): T =
+    suspend fun <T> dbQuery(block: () -> T): T =
         withContext(Dispatchers.IO) {
             transaction {
                 block()
