@@ -1,14 +1,13 @@
 package com.realtor.plugins.routes
 
-import com.realtor.plugins.repository.CategoriesRepository
-import com.realtor.plugins.repository.ContactRepository
-import com.realtor.plugins.repository.HousesRepository
-import com.realtor.plugins.repository.ImagesRepository
+import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.select
 
 fun Route.category(
     db: CategoriesRepository
@@ -307,9 +306,24 @@ fun Route.houses(
             text = "MISSING FIELD",
             status = HttpStatusCode.BadRequest
         )
+        val categoryIdString = parameters["categoryId"]
+        val categoryId = categoryIdString?.toLongOrNull()
+
+        if (categoryId == null) {
+            return@post call.respondText(
+                text = "MISSING OR INVALID categoryId",
+                status = HttpStatusCode.BadRequest
+            )
+        }
 
         try {
+            val categoryTitle = DatabaseFactory.dbQuery {
+                CategoriesTable.select { CategoriesTable.id.eq(categoryId) }
+                    .singleOrNull()?.get(CategoriesTable.name) ?: throw IllegalArgumentException("Category with id $categoryId not found")
+            }
             val houses = db.insert(
+                categoryId = categoryId,
+                categoryTitle = categoryTitle,
                 title = title,
                 price = price,
                 type = type,

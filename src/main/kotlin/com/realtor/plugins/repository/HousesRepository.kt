@@ -9,6 +9,8 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class HousesRepository : HousesDao {
     override suspend fun insert(
+        categoryId: Long,
+        categoryTitle: String,
         title: String,
         price: String,
         type: String,
@@ -55,6 +57,8 @@ class HousesRepository : HousesDao {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = HousesTable.insert { house ->
+                house[HousesTable.categoryId] = categoryId
+                house[HousesTable.categoryTitle] = categoryTitle
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
@@ -194,6 +198,7 @@ class HousesRepository : HousesDao {
     ): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.update({ HousesTable.id.eq(id) }) { house ->
+                house[HousesTable.categoryTitle] = categoryTitle
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type

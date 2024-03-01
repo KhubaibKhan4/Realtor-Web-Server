@@ -4,6 +4,8 @@ import com.realtor.plugins.data.model.Houses
 
 interface HousesDao {
     suspend fun insert(
+        categoryId: Long,
+        categoryTitle: String,
         title: String,
         price: String,
         type: String,
