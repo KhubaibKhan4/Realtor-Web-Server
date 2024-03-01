@@ -28,7 +28,7 @@ class ContactRepository : ContactDao {
         }
     }
 
-    override suspend fun getContactById(id: Int): Contact? {
+    override suspend fun getContactById(id: Long): Contact? {
         return DatabaseFactory.dbQuery {
             ContactTable.select { ContactTable.id.eq(id) }
                 .map {
@@ -37,13 +37,13 @@ class ContactRepository : ContactDao {
         }
     }
 
-    override suspend fun deleteContactById(id: Int): Int? {
+    override suspend fun deleteContactById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             ContactTable.deleteWhere { ContactTable.id.eq(id) }
         }
     }
 
-    override suspend fun updateContactById(id: Int, name: String, email: String, message: String): Int? {
+    override suspend fun updateContactById(id: Long, name: String, email: String, message: String): Int? {
        return DatabaseFactory.dbQuery {
            ContactTable.update({ContactTable.id.eq(id)}){contact ->
                contact[ContactTable.id] = id

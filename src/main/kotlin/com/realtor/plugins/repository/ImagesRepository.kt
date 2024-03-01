@@ -28,7 +28,7 @@ class ImagesRepository : ImagesDao {
         }
     }
 
-    override suspend fun getImagesById(id: Int): Images? {
+    override suspend fun getImagesById(id: Long): Images? {
         return DatabaseFactory.dbQuery {
             ImagesTable.select { ImagesTable.id.eq(id) }
                 .map { rowToResult(it) }
@@ -36,13 +36,13 @@ class ImagesRepository : ImagesDao {
         }
     }
 
-    override suspend fun deleteImagesById(id: Int): Int? {
+    override suspend fun deleteImagesById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             ImagesTable.deleteWhere { ImagesTable.id.eq(id) }
         }
     }
 
-    override suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int? {
+    override suspend fun updateImagesById(id: Long, imageUrl: String, description: String): Int? {
         return DatabaseFactory.dbQuery {
             ImagesTable.update({ ImagesTable.id.eq(id) }) { image ->
                 image[ImagesTable.id] = id

@@ -8,7 +8,7 @@ interface ImagesDao {
         description: String
     ): Images?
     suspend fun getAllImages(): List<Images>?
-    suspend fun getImagesById(id: Int): Images?
-    suspend fun deleteImagesById(id: Int): Int?
-    suspend fun updateImagesById(id: Int, imageUrl: String, description: String): Int?
+    suspend fun getImagesById(id: Long): Images?
+    suspend fun deleteImagesById(id: Long): Int?
+    suspend fun updateImagesById(id: Long, imageUrl: String, description: String): Int?
 }

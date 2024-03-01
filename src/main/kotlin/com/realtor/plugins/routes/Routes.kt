@@ -694,7 +694,7 @@ fun Route.contact(
     get("v1/contact/{id}") {
         val id = call.parameters["id"]
         try {
-            val contact = id?.toInt()?.let { contactID ->
+            val contact = id?.toLongOrNull()?.let { contactID ->
                 db.getContactById(contactID)
             } ?: return@get call.respondText(
                 text = "No Id Found",
@@ -714,7 +714,7 @@ fun Route.contact(
     delete("v1/contact/{id}") {
         val id = call.parameters["id"]
         try {
-            val contact = id?.toInt()?.let {
+            val contact = id?.toLongOrNull()?.let {
                 db.deleteContactById(it)
             } ?: call.respondText(
                 text = "Invalid ID Found",
@@ -759,7 +759,7 @@ fun Route.contact(
         )
         try {
             val contact = id.toInt().let {
-                db.updateContactById(id.toInt(), name = name, email = email, message = message)
+                db.updateContactById(id.toLong(), name = name, email = email, message = message)
             }
             if (contact == 1) {
                 call.respondText(
@@ -836,7 +836,7 @@ fun Route.images(
         )
         try {
             val images = id.toInt().let {
-                db.getImagesById(id.toInt())
+                db.getImagesById(id.toLong())
             } ?: return@get call.respondText(
                 text = "ERROR While FETCHING IMAGE BY ID",
                 status = HttpStatusCode.BadRequest
@@ -855,7 +855,7 @@ fun Route.images(
         val id = call.parameters["id"]
         try {
             val image = id?.toInt()?.let {
-                db.deleteImagesById(id.toInt())
+                db.deleteImagesById(id.toLong())
             } ?: return@delete call.respondText(
                 text = "Invalid ID Found...",
                 status = HttpStatusCode.BadRequest
@@ -894,7 +894,7 @@ fun Route.images(
         )
         try {
             val images = id.toInt().let {
-                db.updateImagesById(id.toInt(), imageUrl, description)
+                db.updateImagesById(id.toLong(), imageUrl, description)
             }
             if (images == 1) {
                 call.respondText(

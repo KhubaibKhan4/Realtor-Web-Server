@@ -1,10 +1,15 @@
 package com.realtor.plugins.data.table
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
 object HousesTable : Table(name = "Houses") {
     val id: Column<Long> = long("id").uniqueIndex().autoIncrement()
+    val categoryId: Column<Long> =
+        long("categoryId").references(ref = CategoriesTable.id, onDelete = ReferenceOption.CASCADE)
+    val categoryTitle: Column<String> =
+        varchar("categoryTitle", length = 300).references(ref = CategoriesTable.name, ReferenceOption.CASCADE)
     val title: Column<String> = varchar("title", length = 1500)
     val price: Column<String> = varchar("price", length = 1500)
     val type: Column<String> = varchar("type", length = 1500)
