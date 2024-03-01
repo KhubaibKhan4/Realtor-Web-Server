@@ -14,3 +14,16 @@ data class House(
     val size: String,
     val rooms: String
 )
+@Serializable
+data class HouseResponse(
+    val success: Boolean,
+    val house: House? = null,
+    val message: String? = null
+)
+
+@Serializable
+data class HousesResponse(
+    val success: Boolean,
+    val houses: List<House> = emptyList(),
+    val message: String? = null
+)
