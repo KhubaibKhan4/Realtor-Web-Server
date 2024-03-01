@@ -49,10 +49,10 @@ interface HousesDao {
     ): Houses?
 
     suspend fun getHouses(): List<Houses>?
-    suspend fun getHousesById(id: Int): Houses?
-    suspend fun deleteHouseById(id: Int): Int?
+    suspend fun getHousesById(id: Long): Houses?
+    suspend fun deleteHouseById(id: Long): Int?
     suspend fun updateHouseById(
-        id: Int,
+        id: Long,
         title: String,
         price: String,
         type: String,

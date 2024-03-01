@@ -113,7 +113,7 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun getHousesById(id: Int): Houses? {
+    override suspend fun getHousesById(id: Long): Houses? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
                 HousesTable.id.eq(id)
@@ -123,7 +123,7 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun deleteHouseById(id: Int): Int? {
+    override suspend fun deleteHouseById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.deleteWhere {
                 HousesTable.id.eq(id)
@@ -132,7 +132,7 @@ class HousesRepository : HousesDao {
     }
 
     override suspend fun updateHouseById(
-        id: Int,
+        id: Long,
         title: String,
         price: String,
         type: String,

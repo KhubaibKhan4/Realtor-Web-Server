@@ -387,7 +387,7 @@ fun Route.houses(
     get("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
-            val houses = id?.toInt()?.let { houseId ->
+            val houses = id?.toLongOrNull()?.let { houseId ->
                 db.getHousesById(houseId)
             } ?: return@get call.respondText(
                 text = "Id is Invalid",
@@ -407,7 +407,7 @@ fun Route.houses(
     delete("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
-            val house = id?.toInt()?.let { houseId ->
+            val house = id?.toLongOrNull()?.let { houseId ->
                 db.deleteHouseById(houseId)
             } ?: return@delete call.respondText(
                 text = "Id is Invalid",
@@ -607,7 +607,7 @@ fun Route.houses(
         try {
             val result = id.toInt().let {
                 db.updateHouseById(
-                    id.toInt(), title, price, type, size, rooms,
+                    id.toLong(), title, price, type, size, rooms,
                     address, mls, county, city, area, neighborhood, zip,
                     style, builtYear, taxes, description, dataSource, priceHistoryDate,
                     priceHistoryDetail, restrictions, housingOlderPersonsAct, foreclosure,
