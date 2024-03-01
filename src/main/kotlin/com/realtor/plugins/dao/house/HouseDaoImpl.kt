@@ -2,11 +2,10 @@ package com.realtor.plugins.dao.house
 
 import com.realtor.plugins.data.table.HouseRow
 import com.realtor.plugins.data.table.HouseTable
-import com.realtor.plugins.data.table.HouseTable.houseId
 import com.realtor.plugins.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.insert
 
-class HouseDaoImpl: HouseDao{
+class HouseDaoImpl : HouseDao {
     override suspend fun createHouse(
         title: String,
         imageUrl: String,
