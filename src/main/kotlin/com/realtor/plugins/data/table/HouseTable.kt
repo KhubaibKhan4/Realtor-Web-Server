@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object HouseTable : Table(name = "house") {
-    val houseId = long(name = "house_id").uniqueIndex()
+    val houseId = long(name = "house_id").uniqueIndex().autoIncrement()
     val title = varchar(name = "title", length = 600)
     val imageUrl = varchar(name = "image_url", length = 600)
     val address = varchar(name = "address", length = 600)
@@ -15,6 +15,8 @@ object HouseTable : Table(name = "house") {
     val rooms = varchar(name = "rooms", length = 600)
     val categoryId =  integer(name = "user_id").references(ref = CategoriesTable.id, onDelete = ReferenceOption.CASCADE)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)
+
+    override val primaryKey: PrimaryKey = PrimaryKey(houseId)
 }
 data class HouseRow(
     val houseId: Long,
