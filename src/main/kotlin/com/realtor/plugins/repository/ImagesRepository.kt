@@ -1,17 +1,21 @@
 package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.ImagesDao
+import com.realtor.plugins.data.model.Houses
 import com.realtor.plugins.data.model.Images
+import com.realtor.plugins.data.table.HousesTable
 import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import java.awt.Image
 
 class ImagesRepository : ImagesDao {
-    override suspend fun insert(imageUrl: String, description: String): Images? {
+    override suspend fun insert(houseId: Long, imageUrl: String, description: String): Images? {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = ImagesTable.insert { image ->
+                image[ImagesTable.houseId] = houseId
                 image[ImagesTable.imageUrl] = imageUrl
                 image[ImagesTable.description] = description
             }
@@ -42,10 +46,11 @@ class ImagesRepository : ImagesDao {
         }
     }
 
-    override suspend fun updateImagesById(id: Long, imageUrl: String, description: String): Int? {
+    override suspend fun updateImagesById(id: Long, houseId: Long, imageUrl: String, description: String): Int? {
         return DatabaseFactory.dbQuery {
             ImagesTable.update({ ImagesTable.id.eq(id) }) { image ->
                 image[ImagesTable.id] = id
+                image[ImagesTable.houseId] = houseId
                 image[ImagesTable.imageUrl] = imageUrl
                 image[ImagesTable.description] = description
             }
@@ -58,6 +63,7 @@ class ImagesRepository : ImagesDao {
         } else {
             return Images(
                 id = row[ImagesTable.id],
+                houseId = row[ImagesTable.houseId],
                 imageUrl = row[ImagesTable.imageUrl],
                 description = row[ImagesTable.description]
             )

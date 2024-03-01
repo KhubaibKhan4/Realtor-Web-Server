@@ -49,5 +49,4 @@ data class Houses(
     val garage: Boolean,
     val basement: Boolean,
     val pool: Boolean,
-    val images: List<Images>
 )

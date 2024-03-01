@@ -811,9 +811,13 @@ fun Route.images(
             text = "DESCRIPTION MISSING",
             status = HttpStatusCode.BadRequest
         )
+        val houseId = parameter["houseId"]?.toLongOrNull() ?: return@post call.respondText(
+            text = "HOUSE ID MISSING OR INVALID",
+            status = HttpStatusCode.BadRequest
+        )
 
         try {
-            val images = db.insert(imageUrl, description)
+            val images = db.insert(houseId,imageUrl, description)
             images?.id?.let {
                 call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $images")
             }
@@ -906,9 +910,13 @@ fun Route.images(
             text = "DESCRIPTION MISSING",
             status = HttpStatusCode.BadRequest
         )
+        val houseId = updateInfo["houseId"]?.toLongOrNull() ?: return@put call.respondText(
+            text = "houseId MISSING",
+            status = HttpStatusCode.BadRequest
+        )
         try {
             val images = id.toInt().let {
-                db.updateImagesById(id.toLong(), imageUrl, description)
+                db.updateImagesById(id.toLong(),houseId, imageUrl, description)
             }
             if (images == 1) {
                 call.respondText(

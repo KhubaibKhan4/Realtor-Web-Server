@@ -1,6 +1,5 @@
 package com.realtor.plugins.data.table
 
-import com.realtor.plugins.data.table.HousesTable.references
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
