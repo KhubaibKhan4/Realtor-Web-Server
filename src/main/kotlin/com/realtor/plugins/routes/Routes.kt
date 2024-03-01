@@ -1,6 +1,8 @@
 package com.realtor.plugins.routes
 
+import com.realtor.plugins.data.model.CategoryWithHouses
 import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.data.table.HousesTable.categoryId
 import com.realtor.plugins.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -56,9 +58,12 @@ fun Route.category(
                 text = "Invalid Id",
                 status = HttpStatusCode.BadRequest
             )
+            val houses = HousesRepository().getHouses()
+            val categoryWithHouses = CategoryWithHouses(category, houses!!)
 
+            call.respond(status = HttpStatusCode.OK, categoryWithHouses)
             category.id.let {
-                call.respond(status = HttpStatusCode.OK, category)
+                call.respond(status = HttpStatusCode.OK, categoryWithHouses)
             }
         } catch (e: Throwable) {
             call.respond(status = HttpStatusCode.BadRequest, "Problems While Fetching Category")
