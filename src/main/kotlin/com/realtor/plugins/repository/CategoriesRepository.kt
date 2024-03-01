@@ -29,7 +29,7 @@ class CategoriesRepository : CategoriesDao {
         }
 
 
-    override suspend fun getCategoryById(id: Int): Categories? =
+    override suspend fun getCategoryById(id: Long): Categories? =
         DatabaseFactory.dbQuery {
             CategoriesTable.select { CategoriesTable.id.eq(id) }
                 .map {
@@ -38,12 +38,12 @@ class CategoriesRepository : CategoriesDao {
         }
 
 
-    override suspend fun deleteCategoryById(id: Int): Int =
+    override suspend fun deleteCategoryById(id: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Int, name: String, priority: String): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name

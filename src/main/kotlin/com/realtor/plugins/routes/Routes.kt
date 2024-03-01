@@ -51,7 +51,7 @@ fun Route.category(
     get("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-            val category = parameter?.toInt()?.let { categoryId ->
+            val category = parameter?.toLongOrNull()?.let { categoryId ->
                 db.getCategoryById(id = categoryId)
             } ?: return@get call.respondText(
                 text = "Invalid Id",
@@ -68,7 +68,7 @@ fun Route.category(
     delete("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-            val category = parameter?.toInt()?.let { categoryId ->
+            val category = parameter?.toLongOrNull()?.let { categoryId ->
                 db.deleteCategoryById(categoryId)
             } ?: return@delete call.respondText(
                 text = "No Id Found",
@@ -107,7 +107,7 @@ fun Route.category(
 
         try {
             val result = id.toInt().let { categoryId ->
-                db.updateCategory(id.toInt(), name, priority)
+                db.updateCategory(id.toLong(), name, priority)
             }
             if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)

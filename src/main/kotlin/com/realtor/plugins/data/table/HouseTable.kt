@@ -13,7 +13,7 @@ object HouseTable : Table(name = "house") {
     val type = varchar(name = "type", length = 600)
     val size = varchar(name = "size", length = 600)
     val rooms = varchar(name = "rooms", length = 600)
-    val categoryId =  integer(name = "user_id").references(ref = CategoriesTable.id, onDelete = ReferenceOption.CASCADE)
+   // val categoryId =  integer(name = "user_id").references(ref = CategoriesTable.id, onDelete = ReferenceOption.CASCADE)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)
 
     override val primaryKey: PrimaryKey = PrimaryKey(houseId)
