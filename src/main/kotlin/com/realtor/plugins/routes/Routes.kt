@@ -1,5 +1,7 @@
 package com.realtor.plugins.routes
 
+import com.realtor.plugins.data.table.HousesTable
+import com.realtor.plugins.data.table.ImagesTable
 import com.realtor.plugins.repository.CategoriesRepository
 import com.realtor.plugins.repository.ContactRepository
 import com.realtor.plugins.repository.HousesRepository
@@ -9,6 +11,9 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.select
 
 fun Route.category(
     db: CategoriesRepository
@@ -353,7 +358,6 @@ fun Route.houses(
                 basement = basement,
                 pool = pool
             )
-
             houses?.id?.let {
                 call.respond(HttpStatusCode.OK, "Data Uploaded Successfully $houses")
             }
