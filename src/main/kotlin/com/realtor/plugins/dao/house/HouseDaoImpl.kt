@@ -4,6 +4,7 @@ import com.realtor.plugins.data.table.HouseRow
 import com.realtor.plugins.data.table.HouseTable
 import com.realtor.plugins.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class HouseDaoImpl : HouseDao {
     override suspend fun createHouse(
@@ -72,7 +73,9 @@ class HouseDaoImpl : HouseDao {
     }
 
     override suspend fun deleteHouse(houseId: Long): Boolean {
-        TODO("Not yet implemented")
+        return dbQuery {
+            HouseTable.deleteWhere { HouseTable.houseId eq houseId } > 0
+        }
     }
     private fun toHouseRow(row: ResultRow): HouseRow {
         return HouseRow(
