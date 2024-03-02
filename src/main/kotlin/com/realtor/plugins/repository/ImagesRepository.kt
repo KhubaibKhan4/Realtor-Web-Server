@@ -40,6 +40,16 @@ class ImagesRepository : ImagesDao {
         }
     }
 
+    override suspend fun getImagesListBYHouseId(id: Long): List<Images> {
+        return DatabaseFactory.dbQuery {
+            ImagesTable.select {
+                ImagesTable.houseId.eq(id)
+            }.mapNotNull {
+                rowToResult(it)
+            }
+        }
+    }
+
     override suspend fun deleteImagesById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             ImagesTable.deleteWhere { ImagesTable.id.eq(id) }
