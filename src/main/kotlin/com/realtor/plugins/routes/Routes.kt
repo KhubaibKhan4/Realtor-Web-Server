@@ -59,9 +59,9 @@ fun Route.category(
                 status = HttpStatusCode.BadRequest
             )
 
-            val houses = HousesRepository().getHouses()
+            val houseList = HousesRepository().getHousesListByCategoryId(category.id)
             //Category with Houses for storing custom List
-            val categoryWithHouses = CategoryWithHouses(category, houses!!)
+            val categoryWithHouses = CategoryWithHouses(category, houseList!!)
 
             call.respond(status = HttpStatusCode.OK, categoryWithHouses)
 

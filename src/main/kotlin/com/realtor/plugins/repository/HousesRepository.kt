@@ -135,7 +135,7 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun getHousesByCategoryId(id: Long): List<Houses>? {
+    override suspend fun getHousesListByCategoryId(id: Long): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
                 HousesTable.categoryId.eq(id)
