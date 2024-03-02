@@ -1,6 +1,5 @@
 package com.realtor.plugins.routes
 
-import com.realtor.plugins.data.model.CategoryWithHouses
 import com.realtor.plugins.data.model.HouseWithImages
 import com.realtor.plugins.data.table.CategoriesTable
 import com.realtor.plugins.repository.*
@@ -57,34 +56,6 @@ fun Route.category(
     get("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-           /* val category = parameter?.toLongOrNull()?.let { categoryId ->
-                db.getCategoryById(id = categoryId)
-            } ?: return@get call.respondText(
-                text = "Invalid Id",
-                status = HttpStatusCode.BadRequest
-            )
-
-            val houseList = HousesRepository().getHousesListByCategoryId(category.id)
-            if (houseList.isNullOrEmpty()) {
-                return@get call.respondText(
-                    text = "No Houses Found for this category",
-                    status = HttpStatusCode.NotFound
-                )
-            }
-            val houseWithImagesList = mutableListOf<HouseWithImages>()
-            for (house in houseList) {
-                val images = ImagesRepository().getImagesListBYHouseId(house.id)
-                val houseWithImages = HouseWithImages(house, images)
-                houseWithImagesList.add(houseWithImages)
-            }
-            //Category with Houses for storing custom List
-            val categoryWithHouses = CategoryWithHouses(category, houseWithImagesList)
-
-            call.respond(status = HttpStatusCode.OK, categoryWithHouses)
-
-            category.id.let {
-                call.respond(status = HttpStatusCode.OK, categoryWithHouses)
-            }*/
             val categoryId = parameter?.toLongOrNull()
             if (categoryId == null) {
                 return@get call.respondText(
@@ -184,10 +155,10 @@ fun Route.category(
                         mapOf(
                             "id" to JsonPrimitive(category.id),
                             "name" to JsonPrimitive(category.name),
-                            "priority" to JsonPrimitive(category.priority)
+                            "priority" to JsonPrimitive(category.priority),
+                            "houses" to JsonArray(housesWithImages)
                         )
-                    ),
-                    "houses" to JsonArray(housesWithImages)
+                    )
                 )
             )
 
