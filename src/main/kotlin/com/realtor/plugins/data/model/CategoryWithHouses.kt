@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CategoryWithHouses(
     val category: Categories,
-    val houses: List<Houses>
+    val houses: List<HouseWithImages>
 )

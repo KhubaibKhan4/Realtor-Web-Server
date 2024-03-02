@@ -3,8 +3,6 @@ package com.realtor.plugins.routes
 import com.realtor.plugins.data.model.CategoryWithHouses
 import com.realtor.plugins.data.model.HouseWithImages
 import com.realtor.plugins.data.table.CategoriesTable
-import com.realtor.plugins.data.table.HousesTable.categoryId
-import com.realtor.plugins.data.table.ImagesTable
 import com.realtor.plugins.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -62,8 +60,20 @@ fun Route.category(
             )
 
             val houseList = HousesRepository().getHousesListByCategoryId(category.id)
+            if (houseList.isNullOrEmpty()) {
+                return@get call.respondText(
+                    text = "No Houses Found for this category",
+                    status = HttpStatusCode.NotFound
+                )
+            }
+            val houseWithImagesList = mutableListOf<HouseWithImages>()
+            for (house in houseList) {
+                val images = ImagesRepository().getImagesListBYHouseId(house.id)
+                val houseWithImages = HouseWithImages(house, images)
+                houseWithImagesList.add(houseWithImages)
+            }
             //Category with Houses for storing custom List
-            val categoryWithHouses = CategoryWithHouses(category, houseList!!)
+            val categoryWithHouses = CategoryWithHouses(category, houseWithImagesList)
 
             call.respond(status = HttpStatusCode.OK, categoryWithHouses)
 
@@ -329,7 +339,8 @@ fun Route.houses(
         try {
             val categoryTitle = DatabaseFactory.dbQuery {
                 CategoriesTable.select { CategoriesTable.id.eq(categoryId) }
-                    .singleOrNull()?.get(CategoriesTable.name) ?: throw IllegalArgumentException("Category with id $categoryId not found")
+                    .singleOrNull()?.get(CategoriesTable.name)
+                    ?: throw IllegalArgumentException("Category with id $categoryId not found")
             }
             val houses = db.insert(
                 categoryId = categoryId,
@@ -418,7 +429,7 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest
             )
             val imagesList = ImagesRepository().getImagesListBYHouseId(houses.id)
-            val houseWithImages = HouseWithImages(houses,imagesList)
+            val houseWithImages = HouseWithImages(houses, imagesList)
             houses.let { houseDetail ->
                 call.respond(status = HttpStatusCode.OK, houseWithImages)
             }
@@ -829,7 +840,7 @@ fun Route.images(
         )
 
         try {
-            val images = db.insert(houseId,imageUrl, description)
+            val images = db.insert(houseId, imageUrl, description)
             images?.id?.let {
                 call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $images")
             }
@@ -928,7 +939,7 @@ fun Route.images(
         )
         try {
             val images = id.toInt().let {
-                db.updateImagesById(id.toLong(),houseId, imageUrl, description)
+                db.updateImagesById(id.toLong(), houseId, imageUrl, description)
             }
             if (images == 1) {
                 call.respondText(
