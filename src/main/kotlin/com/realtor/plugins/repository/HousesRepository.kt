@@ -135,6 +135,16 @@ class HousesRepository : HousesDao {
         }
     }
 
+    override suspend fun getHousesByCategoryId(id: Long): List<Houses>? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryId.eq(id)
+            }.mapNotNull {
+                rowToResult(it)
+            }
+        }
+    }
+
     override suspend fun deleteHouseByCategoryId(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.deleteWhere {
