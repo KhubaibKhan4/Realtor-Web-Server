@@ -1,8 +1,10 @@
 package com.realtor.plugins.routes
 
 import com.realtor.plugins.data.model.CategoryWithHouses
+import com.realtor.plugins.data.model.HouseWithImages
 import com.realtor.plugins.data.table.CategoriesTable
 import com.realtor.plugins.data.table.HousesTable.categoryId
+import com.realtor.plugins.data.table.ImagesTable
 import com.realtor.plugins.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -415,8 +417,10 @@ fun Route.houses(
                 text = "Id is Invalid",
                 status = HttpStatusCode.BadRequest
             )
+            val imagesList = ImagesRepository().getImagesListBYHouseId(houses.id)
+            val houseWithImages = HouseWithImages(houses,imagesList)
             houses.let { houseDetail ->
-                call.respond(status = HttpStatusCode.OK, houses)
+                call.respond(status = HttpStatusCode.OK, houseWithImages)
             }
 
         } catch (e: Throwable) {
