@@ -9,6 +9,11 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.exposed.sql.select
 
 fun Route.category(
@@ -52,7 +57,7 @@ fun Route.category(
     get("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-            val category = parameter?.toLongOrNull()?.let { categoryId ->
+           /* val category = parameter?.toLongOrNull()?.let { categoryId ->
                 db.getCategoryById(id = categoryId)
             } ?: return@get call.respondText(
                 text = "Invalid Id",
@@ -79,7 +84,114 @@ fun Route.category(
 
             category.id.let {
                 call.respond(status = HttpStatusCode.OK, categoryWithHouses)
+            }*/
+            val categoryId = parameter?.toLongOrNull()
+            if (categoryId == null) {
+                return@get call.respondText(
+                    text = "Invalid Id",
+                    status = HttpStatusCode.BadRequest
+                )
             }
+
+            val category = db.getCategoryById(id = categoryId)
+            if (category == null) {
+                return@get call.respondText(
+                    text = "Category not found",
+                    status = HttpStatusCode.NotFound
+                )
+            }
+
+            val houseList = withContext(Dispatchers.IO) {
+                HousesRepository().getHousesListByCategoryId(categoryId)
+            }
+            if (houseList.isNullOrEmpty()) {
+                return@get call.respondText(
+                    text = "No houses found for this category",
+                    status = HttpStatusCode.NotFound
+                )
+            }
+
+            val housesWithImages = houseList.map { house ->
+                val images = ImagesRepository().getImagesListBYHouseId(house.id)
+                JsonObject(
+                    mapOf(
+                        "id" to JsonPrimitive(house.id),
+                        "categoryId" to JsonPrimitive(house.categoryId),
+                        "categoryTitle" to JsonPrimitive(house.categoryTitle),
+                        "title" to JsonPrimitive(house.title),
+                        "price" to JsonPrimitive(house.price),
+                        "type" to JsonPrimitive(house.type),
+                        "size" to JsonPrimitive(house.size),
+                        "rooms" to JsonPrimitive(house.rooms),
+                        "address" to JsonPrimitive(house.address),
+                        "mls" to JsonPrimitive(house.mls),
+                        "county" to JsonPrimitive(house.county),
+                        "city" to JsonPrimitive(house.city),
+                        "area" to JsonPrimitive(house.area),
+                        "neighborhood" to JsonPrimitive(house.neighborhood),
+                        "zip" to JsonPrimitive(house.zip),
+                        "style" to JsonPrimitive(house.style),
+                        "builtYear" to JsonPrimitive(house.builtYear),
+                        "taxes" to JsonPrimitive(house.taxes),
+                        "description" to JsonPrimitive(house.description),
+                        "dataSource" to JsonPrimitive(house.dataSource),
+                        "priceHistoryDate" to JsonPrimitive(house.priceHistoryDate),
+                        "priceHistoryDetail" to JsonPrimitive(house.priceHistoryDetail),
+                        "restrictions" to JsonPrimitive(house.restrictions),
+                        "housingOlderPersonsAct" to JsonPrimitive(house.housingOlderPersonsAct),
+                        "foreclosure" to JsonPrimitive(house.foreclosure),
+                        "views" to JsonPrimitive(house.views),
+                        "short_Sale" to JsonPrimitive(house.short_Sale),
+                        "new_construction" to JsonPrimitive(house.new_construction),
+                        "adult" to JsonPrimitive(house.adult),
+                        "leaseToOwn" to JsonPrimitive(house.leaseToOwn),
+                        "noHoaFees" to JsonPrimitive(house.noHoaFees),
+                        "furnished" to JsonPrimitive(house.furnished),
+                        "pets" to JsonPrimitive(house.pets),
+                        "primaryOnMain" to JsonPrimitive(house.primaryOnMain),
+                        "aitConditioning" to JsonPrimitive(house.aitConditioning),
+                        "sellerFinance" to JsonPrimitive(house.sellerFinance),
+                        "green" to JsonPrimitive(house.green),
+                        "fixedUpper" to JsonPrimitive(house.fixedUpper),
+                        "horse" to JsonPrimitive(house.horse),
+                        "golf" to JsonPrimitive(house.golf),
+                        "fireplace" to JsonPrimitive(house.fireplace),
+                        "deck" to JsonPrimitive(house.deck),
+                        "garage" to JsonPrimitive(house.garage),
+                        "basement" to JsonPrimitive(house.basement),
+                        "pool" to JsonPrimitive(house.pool),
+                        // Add other house properties here
+                        "images" to JsonArray(
+                            images.map { image ->
+                                JsonObject(
+                                    mapOf(
+                                        "id" to JsonPrimitive(image.id),
+                                        "houseId" to JsonPrimitive(image.houseId),
+                                        "imageUrl" to JsonPrimitive(image.imageUrl),
+                                        "description" to JsonPrimitive(image.description)
+                                        // Add other image properties here
+                                    )
+                                )
+                            }
+                        )
+                    )
+                )
+            }
+
+            val categoryJson = JsonObject(
+                mapOf(
+                    "category" to JsonObject(
+                        mapOf(
+                            "id" to JsonPrimitive(category.id),
+                            "name" to JsonPrimitive(category.name),
+                            "priority" to JsonPrimitive(category.priority)
+                        )
+                    ),
+                    "houses" to JsonArray(housesWithImages)
+                )
+            )
+
+            call.respond(status = HttpStatusCode.OK, categoryJson)
         } catch (e: Throwable) {
             call.respond(status = HttpStatusCode.BadRequest, "Problems While Fetching Category")
         }
