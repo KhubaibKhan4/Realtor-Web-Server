@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.8"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+    id("com.github.johnrengelman.shadow")
 }
 
 group = "com.realtor"
@@ -20,6 +21,11 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "com.realtor.ApplicationKt"
+    }
 }
 
 repositories {
@@ -52,4 +58,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("com.zaxxer:HikariCP:$hikaricp_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+}
+tasks.create("stage") {
+    dependsOn("installDist")
 }
