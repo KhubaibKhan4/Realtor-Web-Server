@@ -1,6 +1,6 @@
 package com.realtor.plugins.repository
 
-import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.data.table.category.CategoriesTable
 import com.realtor.plugins.data.table.ContactTable
 import com.realtor.plugins.data.table.HousesTable
 import com.realtor.plugins.data.table.ImagesTable
