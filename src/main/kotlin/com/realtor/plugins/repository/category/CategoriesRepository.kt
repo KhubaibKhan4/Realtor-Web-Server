@@ -5,13 +5,15 @@ import com.realtor.plugins.data.model.category.Categories
 import com.realtor.plugins.data.table.category.CategoriesTable
 import com.realtor.domain.local.DatabaseFactory
 import com.realtor.plugins.data.table.house.HousesTable
+import com.realtor.plugins.repository.house.HousesRepository
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class CategoriesRepository : CategoriesDao {
-    override suspend fun insert(name: String, priority: Int, totalHouses: Int): Categories? {
+    override suspend fun insert(name: String, priority: Int): Categories? {
         var statement: InsertStatement<Number>? = null
+
         DatabaseFactory.dbQuery {
             statement = CategoriesTable.insert { category ->
                 category[CategoriesTable.name] = name
@@ -50,7 +52,7 @@ class CategoriesRepository : CategoriesDao {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Long, name: String, priority: String, totalHouses: Int): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
@@ -66,7 +68,6 @@ class CategoriesRepository : CategoriesDao {
                 name = row[CategoriesTable.name],
                 id = row[CategoriesTable.id],
                 priority = row[CategoriesTable.priority],
-                totalHouses = row[CategoriesTable.totalHouses]
             )
         }
     }

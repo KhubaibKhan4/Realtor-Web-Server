@@ -7,5 +7,4 @@ data class Categories(
     val id: Long,
     val name: String,
     val priority: Int,
-    val totalHouses: Int
 )
