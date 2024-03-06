@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class CategoriesRepository : CategoriesDao {
-    override suspend fun insert(name: String, priority: Int): Categories? {
+    override suspend fun insert(name: String, priority: Int, totalHouses: Int): Categories? {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = CategoriesTable.insert { category ->
@@ -41,7 +41,7 @@ class CategoriesRepository : CategoriesDao {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: String,totalHouses: Int): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
@@ -56,7 +56,8 @@ class CategoriesRepository : CategoriesDao {
             return Categories(
                 name = row[CategoriesTable.name],
                 id = row[CategoriesTable.id],
-                priority = row[CategoriesTable.priority]
+                priority = row[CategoriesTable.priority],
+                totalHouses = row[CategoriesTable.totalHouses]
             )
         }
     }
