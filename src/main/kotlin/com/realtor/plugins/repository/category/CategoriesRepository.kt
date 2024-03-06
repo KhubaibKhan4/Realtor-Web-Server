@@ -37,12 +37,20 @@ class CategoriesRepository : CategoriesDao {
                 }.singleOrNull()
         }
 
+    override suspend fun getCategoryIdByName(name: String): Long? {
+        return DatabaseFactory.dbQuery {
+            CategoriesTable.select {
+                CategoriesTable.name.eq(name)
+            }.singleOrNull()?.get(CategoriesTable.id)
+        }
+    }
+
     override suspend fun deleteCategoryById(id: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Long, name: String, priority: String,totalHouses: Int): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: String, totalHouses: Int): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
