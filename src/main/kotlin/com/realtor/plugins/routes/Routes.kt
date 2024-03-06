@@ -6,6 +6,7 @@ import com.realtor.plugins.repository.*
 import com.realtor.plugins.repository.category.CategoriesRepository
 import com.realtor.plugins.repository.contact.ContactRepository
 import com.realtor.plugins.repository.house.HousesRepository
+import com.realtor.plugins.repository.images.ImagesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*

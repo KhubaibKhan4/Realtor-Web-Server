@@ -1,8 +1,9 @@
-package com.realtor.plugins.repository
+package com.realtor.plugins.repository.images
 
 import com.realtor.plugins.dao.images.ImagesDao
 import com.realtor.plugins.data.model.images.Images
 import com.realtor.plugins.data.table.images.ImagesTable
+import com.realtor.plugins.repository.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
