@@ -18,4 +18,3 @@ fun Application.module() {
     configureSecurity()
     configureRouting()
 }
-const val API_VERSION = "v1/"

@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Houses(
-    val id: Int,
+    val id: Long,
+    val categoryId: Long,
+    val categoryTitle: String,
     val title: String,
     val price: String,
     val type: String,

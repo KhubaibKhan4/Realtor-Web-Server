@@ -9,7 +9,7 @@ interface CategoriesDao {
     ): Categories?
 
     suspend fun getAllCategories(): List<Categories>?
-    suspend fun getCategoryById(id: Int): Categories?
-    suspend fun deleteCategoryById(id: Int): Int?
-    suspend fun updateCategory(id: Int, name: String, priority: String): Int
+    suspend fun getCategoryById(id: Long): Categories?
+    suspend fun deleteCategoryById(id: Long): Int?
+    suspend fun updateCategory(id: Long, name: String, priority: String): Int
 }

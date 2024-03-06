@@ -1,14 +1,19 @@
 package com.realtor.plugins.routes
 
-import com.realtor.plugins.repository.CategoriesRepository
-import com.realtor.plugins.repository.ContactRepository
-import com.realtor.plugins.repository.HousesRepository
-import com.realtor.plugins.repository.ImagesRepository
+import com.realtor.plugins.data.model.HouseWithImages
+import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import org.jetbrains.exposed.sql.select
 
 fun Route.category(
     db: CategoriesRepository
@@ -51,16 +56,113 @@ fun Route.category(
     get("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-            val category = parameter?.toInt()?.let { categoryId ->
-                db.getCategoryById(id = categoryId)
-            } ?: return@get call.respondText(
-                text = "Invalid Id",
-                status = HttpStatusCode.BadRequest
+            val categoryId = parameter?.toLongOrNull()
+            if (categoryId == null) {
+                return@get call.respondText(
+                    text = "Invalid Id",
+                    status = HttpStatusCode.BadRequest
+                )
+            }
+
+            val category = db.getCategoryById(id = categoryId)
+            if (category == null) {
+                return@get call.respondText(
+                    text = "Category not found",
+                    status = HttpStatusCode.NotFound
+                )
+            }
+
+            val houseList = withContext(Dispatchers.IO) {
+                HousesRepository().getHousesListByCategoryId(categoryId)
+            }
+            if (houseList.isNullOrEmpty()) {
+                return@get call.respondText(
+                    text = "No houses found for this category",
+                    status = HttpStatusCode.NotFound
+                )
+            }
+
+            val housesWithImages = houseList.map { house ->
+                val images = ImagesRepository().getImagesListBYHouseId(house.id)
+                JsonObject(
+                    mapOf(
+                        "id" to JsonPrimitive(house.id),
+                        "categoryId" to JsonPrimitive(house.categoryId),
+                        "categoryTitle" to JsonPrimitive(house.categoryTitle),
+                        "title" to JsonPrimitive(house.title),
+                        "price" to JsonPrimitive(house.price),
+                        "type" to JsonPrimitive(house.type),
+                        "size" to JsonPrimitive(house.size),
+                        "rooms" to JsonPrimitive(house.rooms),
+                        "address" to JsonPrimitive(house.address),
+                        "mls" to JsonPrimitive(house.mls),
+                        "county" to JsonPrimitive(house.county),
+                        "city" to JsonPrimitive(house.city),
+                        "area" to JsonPrimitive(house.area),
+                        "neighborhood" to JsonPrimitive(house.neighborhood),
+                        "zip" to JsonPrimitive(house.zip),
+                        "style" to JsonPrimitive(house.style),
+                        "builtYear" to JsonPrimitive(house.builtYear),
+                        "taxes" to JsonPrimitive(house.taxes),
+                        "description" to JsonPrimitive(house.description),
+                        "dataSource" to JsonPrimitive(house.dataSource),
+                        "priceHistoryDate" to JsonPrimitive(house.priceHistoryDate),
+                        "priceHistoryDetail" to JsonPrimitive(house.priceHistoryDetail),
+                        "restrictions" to JsonPrimitive(house.restrictions),
+                        "housingOlderPersonsAct" to JsonPrimitive(house.housingOlderPersonsAct),
+                        "foreclosure" to JsonPrimitive(house.foreclosure),
+                        "views" to JsonPrimitive(house.views),
+                        "short_Sale" to JsonPrimitive(house.short_Sale),
+                        "new_construction" to JsonPrimitive(house.new_construction),
+                        "adult" to JsonPrimitive(house.adult),
+                        "leaseToOwn" to JsonPrimitive(house.leaseToOwn),
+                        "noHoaFees" to JsonPrimitive(house.noHoaFees),
+                        "furnished" to JsonPrimitive(house.furnished),
+                        "pets" to JsonPrimitive(house.pets),
+                        "primaryOnMain" to JsonPrimitive(house.primaryOnMain),
+                        "aitConditioning" to JsonPrimitive(house.aitConditioning),
+                        "sellerFinance" to JsonPrimitive(house.sellerFinance),
+                        "green" to JsonPrimitive(house.green),
+                        "fixedUpper" to JsonPrimitive(house.fixedUpper),
+                        "horse" to JsonPrimitive(house.horse),
+                        "golf" to JsonPrimitive(house.golf),
+                        "fireplace" to JsonPrimitive(house.fireplace),
+                        "deck" to JsonPrimitive(house.deck),
+                        "garage" to JsonPrimitive(house.garage),
+                        "basement" to JsonPrimitive(house.basement),
+                        "pool" to JsonPrimitive(house.pool),
+                        // Add other house properties here
+                        "images" to JsonArray(
+                            images.map { image ->
+                                JsonObject(
+                                    mapOf(
+                                        "id" to JsonPrimitive(image.id),
+                                        "houseId" to JsonPrimitive(image.houseId),
+                                        "imageUrl" to JsonPrimitive(image.imageUrl),
+                                        "description" to JsonPrimitive(image.description)
+                                        // Add other image properties here
+                                    )
+                                )
+                            }
+                        )
+                    )
+                )
+            }
+
+            val categoryJson = JsonObject(
+                mapOf(
+                    "category" to JsonObject(
+                        mapOf(
+                            "id" to JsonPrimitive(category.id),
+                            "name" to JsonPrimitive(category.name),
+                            "priority" to JsonPrimitive(category.priority),
+                            "houses" to JsonArray(housesWithImages)
+                        )
+                    )
+                )
             )
 
-            category.id.let {
-                call.respond(status = HttpStatusCode.OK, category)
-            }
+            call.respond(status = HttpStatusCode.OK, categoryJson)
         } catch (e: Throwable) {
             call.respond(status = HttpStatusCode.BadRequest, "Problems While Fetching Category")
         }
@@ -68,7 +170,7 @@ fun Route.category(
     delete("v1/category/{id}") {
         val parameter = call.parameters["id"]
         try {
-            val category = parameter?.toInt()?.let { categoryId ->
+            val category = parameter?.toLongOrNull()?.let { categoryId ->
                 db.deleteCategoryById(categoryId)
             } ?: return@delete call.respondText(
                 text = "No Id Found",
@@ -107,7 +209,7 @@ fun Route.category(
 
         try {
             val result = id.toInt().let { categoryId ->
-                db.updateCategory(id.toInt(), name, priority)
+                db.updateCategory(id.toLong(), name, priority)
             }
             if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)
@@ -307,9 +409,25 @@ fun Route.houses(
             text = "MISSING FIELD",
             status = HttpStatusCode.BadRequest
         )
+        val categoryIdString = parameters["categoryId"]
+        val categoryId = categoryIdString?.toLongOrNull()
+
+        if (categoryId == null) {
+            return@post call.respondText(
+                text = "MISSING OR INVALID categoryId",
+                status = HttpStatusCode.BadRequest
+            )
+        }
 
         try {
+            val categoryTitle = DatabaseFactory.dbQuery {
+                CategoriesTable.select { CategoriesTable.id.eq(categoryId) }
+                    .singleOrNull()?.get(CategoriesTable.name)
+                    ?: throw IllegalArgumentException("Category with id $categoryId not found")
+            }
             val houses = db.insert(
+                categoryId = categoryId,
+                categoryTitle = categoryTitle,
                 title = title,
                 price = price,
                 type = type,
@@ -353,7 +471,6 @@ fun Route.houses(
                 basement = basement,
                 pool = pool
             )
-
             houses?.id?.let {
                 call.respond(HttpStatusCode.OK, "Data Uploaded Successfully $houses")
             }
@@ -388,14 +505,16 @@ fun Route.houses(
     get("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
-            val houses = id?.toInt()?.let { houseId ->
+            val houses = id?.toLongOrNull()?.let { houseId ->
                 db.getHousesById(houseId)
             } ?: return@get call.respondText(
                 text = "Id is Invalid",
                 status = HttpStatusCode.BadRequest
             )
+            val imagesList = ImagesRepository().getImagesListBYHouseId(houses.id)
+            val houseWithImages = HouseWithImages(houses, imagesList)
             houses.let { houseDetail ->
-                call.respond(status = HttpStatusCode.OK, houses)
+                call.respond(status = HttpStatusCode.OK, houseWithImages)
             }
 
         } catch (e: Throwable) {
@@ -408,7 +527,7 @@ fun Route.houses(
     delete("v1/house/{id}") {
         val id = call.parameters["id"]
         try {
-            val house = id?.toInt()?.let { houseId ->
+            val house = id?.toLongOrNull()?.let { houseId ->
                 db.deleteHouseById(houseId)
             } ?: return@delete call.respondText(
                 text = "Id is Invalid",
@@ -608,7 +727,7 @@ fun Route.houses(
         try {
             val result = id.toInt().let {
                 db.updateHouseById(
-                    id.toInt(), title, price, type, size, rooms,
+                    id.toLong(), title, price, type, size, rooms,
                     address, mls, county, city, area, neighborhood, zip,
                     style, builtYear, taxes, description, dataSource, priceHistoryDate,
                     priceHistoryDetail, restrictions, housingOlderPersonsAct, foreclosure,
@@ -695,7 +814,7 @@ fun Route.contact(
     get("v1/contact/{id}") {
         val id = call.parameters["id"]
         try {
-            val contact = id?.toInt()?.let { contactID ->
+            val contact = id?.toLongOrNull()?.let { contactID ->
                 db.getContactById(contactID)
             } ?: return@get call.respondText(
                 text = "No Id Found",
@@ -715,7 +834,7 @@ fun Route.contact(
     delete("v1/contact/{id}") {
         val id = call.parameters["id"]
         try {
-            val contact = id?.toInt()?.let {
+            val contact = id?.toLongOrNull()?.let {
                 db.deleteContactById(it)
             } ?: call.respondText(
                 text = "Invalid ID Found",
@@ -760,7 +879,7 @@ fun Route.contact(
         )
         try {
             val contact = id.toInt().let {
-                db.updateContactById(id.toInt(), name = name, email = email, message = message)
+                db.updateContactById(id.toLong(), name = name, email = email, message = message)
             }
             if (contact == 1) {
                 call.respondText(
@@ -798,9 +917,13 @@ fun Route.images(
             text = "DESCRIPTION MISSING",
             status = HttpStatusCode.BadRequest
         )
+        val houseId = parameter["houseId"]?.toLongOrNull() ?: return@post call.respondText(
+            text = "HOUSE ID MISSING OR INVALID",
+            status = HttpStatusCode.BadRequest
+        )
 
         try {
-            val images = db.insert(imageUrl, description)
+            val images = db.insert(houseId, imageUrl, description)
             images?.id?.let {
                 call.respond(status = HttpStatusCode.OK, "Data Uploaded Successfully $images")
             }
@@ -837,7 +960,7 @@ fun Route.images(
         )
         try {
             val images = id.toInt().let {
-                db.getImagesById(id.toInt())
+                db.getImagesById(id.toLong())
             } ?: return@get call.respondText(
                 text = "ERROR While FETCHING IMAGE BY ID",
                 status = HttpStatusCode.BadRequest
@@ -856,7 +979,7 @@ fun Route.images(
         val id = call.parameters["id"]
         try {
             val image = id?.toInt()?.let {
-                db.deleteImagesById(id.toInt())
+                db.deleteImagesById(id.toLong())
             } ?: return@delete call.respondText(
                 text = "Invalid ID Found...",
                 status = HttpStatusCode.BadRequest
@@ -893,9 +1016,13 @@ fun Route.images(
             text = "DESCRIPTION MISSING",
             status = HttpStatusCode.BadRequest
         )
+        val houseId = updateInfo["houseId"]?.toLongOrNull() ?: return@put call.respondText(
+            text = "houseId MISSING",
+            status = HttpStatusCode.BadRequest
+        )
         try {
             val images = id.toInt().let {
-                db.updateImagesById(id.toInt(), imageUrl, description)
+                db.updateImagesById(id.toLong(), houseId, imageUrl, description)
             }
             if (images == 1) {
                 call.respondText(

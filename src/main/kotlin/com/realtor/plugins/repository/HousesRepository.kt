@@ -1,16 +1,16 @@
 package com.realtor.plugins.repository
 
-import com.realtor.plugins.dao.HousesDao
+import com.realtor.plugins.dao.house.HousesDao
 import com.realtor.plugins.data.model.Houses
-import com.realtor.plugins.data.model.Images
 import com.realtor.plugins.data.table.HousesTable
-import com.realtor.plugins.data.table.ImagesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class HousesRepository : HousesDao {
     override suspend fun insert(
+        categoryId: Long,
+        categoryTitle: String,
         title: String,
         price: String,
         type: String,
@@ -57,6 +57,8 @@ class HousesRepository : HousesDao {
         var statement: InsertStatement<Number>? = null
         DatabaseFactory.dbQuery {
             statement = HousesTable.insert { house ->
+                house[HousesTable.categoryId] = categoryId
+                house[HousesTable.categoryTitle] = categoryTitle
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
@@ -113,7 +115,7 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun getHousesById(id: Int): Houses? {
+    override suspend fun getHousesById(id: Long): Houses? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
                 HousesTable.id.eq(id)
@@ -123,7 +125,35 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun deleteHouseById(id: Int): Int? {
+    override suspend fun getHouseByCategoryId(id: Long): Houses? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryId.eq(id)
+            }.map {
+                rowToResult(it)
+            }.singleOrNull()
+        }
+    }
+
+    override suspend fun getHousesListByCategoryId(id: Long): List<Houses>? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryId.eq(id)
+            }.mapNotNull {
+                rowToResult(it)
+            }
+        }
+    }
+
+    override suspend fun deleteHouseByCategoryId(id: Long): Int? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.deleteWhere {
+                HousesTable.categoryId.eq(id)
+            }
+        }
+    }
+
+    override suspend fun deleteHouseById(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.deleteWhere {
                 HousesTable.id.eq(id)
@@ -132,7 +162,7 @@ class HousesRepository : HousesDao {
     }
 
     override suspend fun updateHouseById(
-        id: Int,
+        id: Long,
         title: String,
         price: String,
         type: String,
@@ -178,6 +208,7 @@ class HousesRepository : HousesDao {
     ): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.update({ HousesTable.id.eq(id) }) { house ->
+                house[HousesTable.categoryTitle] = categoryTitle
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
@@ -228,6 +259,8 @@ class HousesRepository : HousesDao {
         return row[HousesTable.id]?.let { id ->
             Houses(
                 id = id,
+                categoryId = row[HousesTable.categoryId],
+                categoryTitle = row[HousesTable.categoryTitle],
                 title = row[HousesTable.title],
                 price = row[HousesTable.price],
                 type = row[HousesTable.type],

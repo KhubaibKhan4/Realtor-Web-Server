@@ -2,9 +2,7 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.CategoriesDao
 import com.realtor.plugins.data.model.Categories
-import com.realtor.plugins.data.model.Houses
 import com.realtor.plugins.data.table.CategoriesTable
-import com.realtor.plugins.data.table.HousesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -18,18 +16,18 @@ class CategoriesRepository : CategoriesDao {
                 category[CategoriesTable.priority] = priority
             }
         }
-        return rowToCategory(statement?.resultedValues?.get(0) !!)
+        return rowToCategory(statement?.resultedValues?.get(0)!!)
     }
 
     override suspend fun getAllCategories(): List<Categories> =
         DatabaseFactory.dbQuery {
             CategoriesTable.selectAll().mapNotNull {
-                    rowToCategory(it)
-                }
+                rowToCategory(it)
+            }
         }
 
 
-    override suspend fun getCategoryById(id: Int): Categories? =
+    override suspend fun getCategoryById(id: Long): Categories? =
         DatabaseFactory.dbQuery {
             CategoriesTable.select { CategoriesTable.id.eq(id) }
                 .map {
@@ -37,13 +35,12 @@ class CategoriesRepository : CategoriesDao {
                 }.singleOrNull()
         }
 
-
-    override suspend fun deleteCategoryById(id: Int): Int =
+    override suspend fun deleteCategoryById(id: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Int, name: String, priority: String): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
