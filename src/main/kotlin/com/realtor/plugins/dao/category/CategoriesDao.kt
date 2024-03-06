@@ -1,6 +1,6 @@
 package com.realtor.plugins.dao.category
 
-import com.realtor.plugins.data.model.Categories
+import com.realtor.plugins.data.model.category.Categories
 
 interface CategoriesDao {
     suspend fun insert(
