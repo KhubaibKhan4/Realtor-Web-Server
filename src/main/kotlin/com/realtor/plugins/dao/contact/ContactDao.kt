@@ -1,6 +1,6 @@
 package com.realtor.plugins.dao.contact
 
-import com.realtor.plugins.data.model.Contact
+import com.realtor.plugins.data.model.contact.Contact
 
 interface ContactDao {
     suspend fun insert(
