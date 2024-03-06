@@ -1,6 +1,6 @@
 package com.realtor.plugins.repository
 
-import com.realtor.plugins.dao.ContactDao
+import com.realtor.plugins.dao.contact.ContactDao
 import com.realtor.plugins.data.model.Contact
 import com.realtor.plugins.data.table.ContactTable
 import org.jetbrains.exposed.sql.*
