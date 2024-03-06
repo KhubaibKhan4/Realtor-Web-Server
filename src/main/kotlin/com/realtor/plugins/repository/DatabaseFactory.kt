@@ -2,7 +2,7 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.data.table.category.CategoriesTable
 import com.realtor.plugins.data.table.contact.ContactTable
-import com.realtor.plugins.data.table.HousesTable
+import com.realtor.plugins.data.table.house.HousesTable
 import com.realtor.plugins.data.table.ImagesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
