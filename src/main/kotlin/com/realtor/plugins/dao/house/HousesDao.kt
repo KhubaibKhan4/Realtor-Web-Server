@@ -1,6 +1,6 @@
 package com.realtor.plugins.dao.house
 
-import com.realtor.plugins.data.model.Houses
+import com.realtor.plugins.data.model.house.Houses
 
 interface HousesDao {
     suspend fun insert(

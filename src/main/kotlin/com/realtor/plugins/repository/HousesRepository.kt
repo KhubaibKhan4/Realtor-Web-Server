@@ -1,7 +1,7 @@
 package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.house.HousesDao
-import com.realtor.plugins.data.model.Houses
+import com.realtor.plugins.data.model.house.Houses
 import com.realtor.plugins.data.table.HousesTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

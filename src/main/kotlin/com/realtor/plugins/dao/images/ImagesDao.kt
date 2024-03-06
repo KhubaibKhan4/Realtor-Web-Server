@@ -1,6 +1,5 @@
 package com.realtor.plugins.dao.images
 
-import com.realtor.plugins.data.model.HouseWithImages
 import com.realtor.plugins.data.model.Images
 
 interface ImagesDao {
