@@ -1,6 +1,6 @@
 package com.realtor.plugins.data.model.house
 
-import com.realtor.plugins.data.model.Images
+import com.realtor.plugins.data.model.images.Images
 import kotlinx.serialization.Serializable
 
 @Serializable
