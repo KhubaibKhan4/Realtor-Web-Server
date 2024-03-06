@@ -2,7 +2,7 @@ package com.realtor.plugins.repository
 
 import com.realtor.plugins.dao.contact.ContactDao
 import com.realtor.plugins.data.model.contact.Contact
-import com.realtor.plugins.data.table.ContactTable
+import com.realtor.plugins.data.table.contact.ContactTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -45,7 +45,7 @@ class ContactRepository : ContactDao {
 
     override suspend fun updateContactById(id: Long, name: String, email: String, message: String): Int? {
        return DatabaseFactory.dbQuery {
-           ContactTable.update({ContactTable.id.eq(id)}){contact ->
+           ContactTable.update({ ContactTable.id.eq(id)}){ contact ->
                contact[ContactTable.id] = id
                contact[ContactTable.name] = name
                contact[ContactTable.email] = email
