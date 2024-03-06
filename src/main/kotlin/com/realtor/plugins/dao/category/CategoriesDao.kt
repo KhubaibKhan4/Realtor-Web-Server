@@ -11,6 +11,7 @@ interface CategoriesDao {
 
     suspend fun getAllCategories(): List<Categories>?
     suspend fun getCategoryById(id: Long): Categories?
+    suspend fun getCategoryIdByName(name: String): Long?
     suspend fun deleteCategoryById(id: Long): Int?
     suspend fun updateCategory(id: Long, name: String, priority: String, totalHouses: Int): Int
 }
