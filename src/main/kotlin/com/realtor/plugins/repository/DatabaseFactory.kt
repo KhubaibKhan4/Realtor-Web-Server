@@ -3,7 +3,7 @@ package com.realtor.plugins.repository
 import com.realtor.plugins.data.table.category.CategoriesTable
 import com.realtor.plugins.data.table.contact.ContactTable
 import com.realtor.plugins.data.table.house.HousesTable
-import com.realtor.plugins.data.table.ImagesTable
+import com.realtor.plugins.data.table.images.ImagesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
