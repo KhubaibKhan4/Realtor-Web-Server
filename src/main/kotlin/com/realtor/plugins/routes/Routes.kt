@@ -34,7 +34,7 @@ fun Route.category(
         )
 
         try {
-            val category = db.insert(name, priority.toInt())
+            val category = db.insert(name, priority.toLong())
             category?.id?.let {
                 call.respond(status = HttpStatusCode.OK, "Uploaded to Server Successfully $category")
             }
@@ -213,7 +213,7 @@ fun Route.category(
 
         try {
             val result = id.toInt().let { categoryId ->
-                db.updateCategory(id.toLong(), name, priority)
+                db.updateCategory(id.toLong(), name, priority.toLong())
             }
             if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)

@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class CategoriesRepository : CategoriesDao {
-    override suspend fun insert(name: String, priority: Int): Categories? {
+    override suspend fun insert(name: String, priority: Long): Categories? {
         var statement: InsertStatement<Number>? = null
 
         DatabaseFactory.dbQuery {
@@ -52,11 +52,12 @@ class CategoriesRepository : CategoriesDao {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
                 category[CategoriesTable.id] = id
+                category[CategoriesTable.priority]=priority
             }
         }
 
