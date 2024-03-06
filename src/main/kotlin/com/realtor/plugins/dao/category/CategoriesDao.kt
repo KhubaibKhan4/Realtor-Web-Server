@@ -1,4 +1,4 @@
-package com.realtor.plugins.dao
+package com.realtor.plugins.dao.category
 
 import com.realtor.plugins.data.model.Categories
 

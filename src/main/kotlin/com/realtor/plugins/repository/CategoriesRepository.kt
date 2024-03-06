@@ -1,6 +1,6 @@
 package com.realtor.plugins.repository
 
-import com.realtor.plugins.dao.CategoriesDao
+import com.realtor.plugins.dao.category.CategoriesDao
 import com.realtor.plugins.data.model.Categories
 import com.realtor.plugins.data.table.CategoriesTable
 import org.jetbrains.exposed.sql.*
