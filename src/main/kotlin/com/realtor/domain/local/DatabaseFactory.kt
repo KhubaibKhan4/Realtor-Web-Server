@@ -1,4 +1,4 @@
-package com.realtor.plugins.repository
+package com.realtor.domain.local
 
 import com.realtor.plugins.data.table.category.CategoriesTable
 import com.realtor.plugins.data.table.contact.ContactTable

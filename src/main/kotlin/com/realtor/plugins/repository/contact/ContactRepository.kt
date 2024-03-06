@@ -3,7 +3,7 @@ package com.realtor.plugins.repository.contact
 import com.realtor.plugins.dao.contact.ContactDao
 import com.realtor.plugins.data.model.contact.Contact
 import com.realtor.plugins.data.table.contact.ContactTable
-import com.realtor.plugins.repository.DatabaseFactory
+import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement

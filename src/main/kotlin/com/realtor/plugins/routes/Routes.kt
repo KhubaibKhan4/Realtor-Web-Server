@@ -1,8 +1,8 @@
 package com.realtor.plugins.routes
 
+import com.realtor.domain.local.DatabaseFactory
 import com.realtor.plugins.data.model.house.HouseWithImages
 import com.realtor.plugins.data.table.category.CategoriesTable
-import com.realtor.plugins.repository.*
 import com.realtor.plugins.repository.category.CategoriesRepository
 import com.realtor.plugins.repository.contact.ContactRepository
 import com.realtor.plugins.repository.house.HousesRepository

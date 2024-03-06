@@ -3,7 +3,7 @@ package com.realtor.plugins.repository.category
 import com.realtor.plugins.dao.category.CategoriesDao
 import com.realtor.plugins.data.model.category.Categories
 import com.realtor.plugins.data.table.category.CategoriesTable
-import com.realtor.plugins.repository.DatabaseFactory
+import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
