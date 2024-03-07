@@ -1,6 +1,5 @@
-package com.realtor.plugins.data.table
+package com.realtor.plugins.data.table.house
 
-import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime

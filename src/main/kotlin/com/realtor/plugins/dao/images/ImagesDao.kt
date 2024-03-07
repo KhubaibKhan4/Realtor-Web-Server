@@ -1,7 +1,6 @@
-package com.realtor.plugins.dao
+package com.realtor.plugins.dao.images
 
-import com.realtor.plugins.data.model.HouseWithImages
-import com.realtor.plugins.data.model.Images
+import com.realtor.plugins.data.model.images.Images
 
 interface ImagesDao {
     suspend fun insert(

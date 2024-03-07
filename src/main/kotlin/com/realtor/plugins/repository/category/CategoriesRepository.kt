@@ -1,15 +1,19 @@
-package com.realtor.plugins.repository
+package com.realtor.plugins.repository.category
 
-import com.realtor.plugins.dao.CategoriesDao
-import com.realtor.plugins.data.model.Categories
-import com.realtor.plugins.data.table.CategoriesTable
+import com.realtor.plugins.dao.category.CategoriesDao
+import com.realtor.plugins.data.model.category.Categories
+import com.realtor.plugins.data.table.category.CategoriesTable
+import com.realtor.domain.local.DatabaseFactory
+import com.realtor.plugins.data.table.house.HousesTable
+import com.realtor.plugins.repository.house.HousesRepository
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class CategoriesRepository : CategoriesDao {
-    override suspend fun insert(name: String, priority: Int): Categories? {
+    override suspend fun insert(name: String, priority: Long): Categories? {
         var statement: InsertStatement<Number>? = null
+
         DatabaseFactory.dbQuery {
             statement = CategoriesTable.insert { category ->
                 category[CategoriesTable.name] = name
@@ -35,16 +39,25 @@ class CategoriesRepository : CategoriesDao {
                 }.singleOrNull()
         }
 
+    override suspend fun getCategoryIdByName(name: String): Long? {
+        return DatabaseFactory.dbQuery {
+            CategoriesTable.select {
+                CategoriesTable.name.eq(name)
+            }.singleOrNull()?.get(CategoriesTable.id)
+        }
+    }
+
     override suspend fun deleteCategoryById(id: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.deleteWhere { CategoriesTable.id.eq(id) }
         }
 
-    override suspend fun updateCategory(id: Long, name: String, priority: String): Int =
+    override suspend fun updateCategory(id: Long, name: String, priority: Long): Int =
         DatabaseFactory.dbQuery {
             CategoriesTable.update({ CategoriesTable.id.eq(id) }) { category ->
                 category[CategoriesTable.name] = name
                 category[CategoriesTable.id] = id
+                category[CategoriesTable.priority]=priority
             }
         }
 
@@ -55,7 +68,7 @@ class CategoriesRepository : CategoriesDao {
             return Categories(
                 name = row[CategoriesTable.name],
                 id = row[CategoriesTable.id],
-                priority = row[CategoriesTable.priority]
+                priority = row[CategoriesTable.priority],
             )
         }
     }

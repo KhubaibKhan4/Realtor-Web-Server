@@ -1,14 +1,12 @@
-package com.realtor.plugins.repository
+package com.realtor.plugins.repository.images
 
-import com.realtor.plugins.dao.ImagesDao
-import com.realtor.plugins.data.model.Houses
-import com.realtor.plugins.data.model.Images
-import com.realtor.plugins.data.table.HousesTable
-import com.realtor.plugins.data.table.ImagesTable
+import com.realtor.plugins.dao.images.ImagesDao
+import com.realtor.plugins.data.model.images.Images
+import com.realtor.plugins.data.table.images.ImagesTable
+import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import java.awt.Image
 
 class ImagesRepository : ImagesDao {
     override suspend fun insert(houseId: Long, imageUrl: String, description: String): Images? {

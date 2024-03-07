@@ -1,8 +1,9 @@
-package com.realtor.plugins.repository
+package com.realtor.plugins.repository.house
 
 import com.realtor.plugins.dao.house.HousesDao
-import com.realtor.plugins.data.model.Houses
-import com.realtor.plugins.data.table.HousesTable
+import com.realtor.plugins.data.model.house.Houses
+import com.realtor.plugins.data.table.house.HousesTable
+import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -82,15 +83,15 @@ class HousesRepository : HousesDao {
                 house[HousesTable.housingOlderPersonsAct] = housingOlderPersonsAct
                 house[HousesTable.foreclosure] = foreclosure
                 house[HousesTable.views] = views
-                house[HousesTable.shortSale] = short_Sale
-                house[HousesTable.newConstruction] = new_construction
+                house[shortSale] = short_Sale
+                house[newConstruction] = new_construction
                 house[HousesTable.adult] = adult
                 house[HousesTable.leaseToOwn] = leaseToOwn
                 house[HousesTable.noHoaFees] = noHoaFees
                 house[HousesTable.furnished] = furnished
                 house[HousesTable.pets] = pets
                 house[HousesTable.primaryOnMain] = primaryOnMain
-                house[HousesTable.airConditioning] = aitConditioning
+                house[airConditioning] = aitConditioning
                 house[HousesTable.sellerFinance] = sellerFinance
                 house[HousesTable.green] = green
                 house[HousesTable.fixedUpper] = fixedUpper
@@ -145,10 +146,18 @@ class HousesRepository : HousesDao {
         }
     }
 
+    override suspend fun getTotalHousesByCategoryId(categoryId: Long): Long? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryId.eq(categoryId)
+            }.count()
+        }
+    }
+
     override suspend fun deleteHouseByCategoryId(id: Long): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.deleteWhere {
-                HousesTable.categoryId.eq(id)
+                categoryId.eq(id)
             }
         }
     }
@@ -208,7 +217,7 @@ class HousesRepository : HousesDao {
     ): Int? {
         return DatabaseFactory.dbQuery {
             HousesTable.update({ HousesTable.id.eq(id) }) { house ->
-                house[HousesTable.categoryTitle] = categoryTitle
+                house[categoryTitle] = categoryTitle
                 house[HousesTable.title] = title
                 house[HousesTable.price] = price
                 house[HousesTable.type] = type
@@ -232,15 +241,15 @@ class HousesRepository : HousesDao {
                 house[HousesTable.housingOlderPersonsAct] = housingOlderPersonsAct
                 house[HousesTable.foreclosure] = foreclosure
                 house[HousesTable.views] = views
-                house[HousesTable.shortSale] = short_Sale
-                house[HousesTable.newConstruction] = new_construction
+                house[shortSale] = short_Sale
+                house[newConstruction] = new_construction
                 house[HousesTable.adult] = adult
                 house[HousesTable.leaseToOwn] = leaseToOwn
                 house[HousesTable.noHoaFees] = noHoaFees
                 house[HousesTable.furnished] = furnished
                 house[HousesTable.pets] = pets
                 house[HousesTable.primaryOnMain] = primaryOnMain
-                house[HousesTable.airConditioning] = aitConditioning
+                house[airConditioning] = aitConditioning
                 house[HousesTable.sellerFinance] = sellerFinance
                 house[HousesTable.green] = green
                 house[HousesTable.fixedUpper] = fixedUpper

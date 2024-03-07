@@ -1,6 +1,10 @@
 package com.realtor.plugins
 
-import com.realtor.plugins.repository.*
+import com.realtor.domain.local.DatabaseFactory
+import com.realtor.plugins.repository.category.CategoriesRepository
+import com.realtor.plugins.repository.contact.ContactRepository
+import com.realtor.plugins.repository.house.HousesRepository
+import com.realtor.plugins.repository.images.ImagesRepository
 import com.realtor.plugins.routes.category
 import com.realtor.plugins.routes.contact
 import com.realtor.plugins.routes.houses

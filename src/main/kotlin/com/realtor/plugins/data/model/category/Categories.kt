@@ -1,4 +1,4 @@
-package com.realtor.plugins.data.model
+package com.realtor.plugins.data.model.category
 
 import kotlinx.serialization.Serializable
 
@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Categories(
     val id: Long,
     val name: String,
-    val priority: Int
+    val priority: Long,
 )

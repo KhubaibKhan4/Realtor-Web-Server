@@ -1,4 +1,4 @@
-package com.realtor.plugins.data.table
+package com.realtor.plugins.data.table.contact
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table

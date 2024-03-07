@@ -1,8 +1,12 @@
 package com.realtor.plugins.routes
 
-import com.realtor.plugins.data.model.HouseWithImages
-import com.realtor.plugins.data.table.CategoriesTable
-import com.realtor.plugins.repository.*
+import com.realtor.domain.local.DatabaseFactory
+import com.realtor.plugins.data.model.house.HouseWithImages
+import com.realtor.plugins.data.table.category.CategoriesTable
+import com.realtor.plugins.repository.category.CategoriesRepository
+import com.realtor.plugins.repository.contact.ContactRepository
+import com.realtor.plugins.repository.house.HousesRepository
+import com.realtor.plugins.repository.images.ImagesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -30,7 +34,7 @@ fun Route.category(
         )
 
         try {
-            val category = db.insert(name, priority.toInt())
+            val category = db.insert(name, priority.toLong())
             category?.id?.let {
                 call.respond(status = HttpStatusCode.OK, "Uploaded to Server Successfully $category")
             }
@@ -209,7 +213,7 @@ fun Route.category(
 
         try {
             val result = id.toInt().let { categoryId ->
-                db.updateCategory(id.toLong(), name, priority)
+                db.updateCategory(id.toLong(), name, priority.toLong())
             }
             if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)

@@ -1,9 +1,9 @@
-package com.realtor.plugins.repository
+package com.realtor.domain.local
 
-import com.realtor.plugins.data.table.CategoriesTable
-import com.realtor.plugins.data.table.ContactTable
-import com.realtor.plugins.data.table.HousesTable
-import com.realtor.plugins.data.table.ImagesTable
+import com.realtor.plugins.data.table.category.CategoriesTable
+import com.realtor.plugins.data.table.contact.ContactTable
+import com.realtor.plugins.data.table.house.HousesTable
+import com.realtor.plugins.data.table.images.ImagesTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers

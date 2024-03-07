@@ -1,4 +1,4 @@
-package com.realtor.plugins.data.model
+package com.realtor.plugins.data.model.house
 
 import kotlinx.serialization.Serializable
 
