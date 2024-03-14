@@ -760,6 +760,29 @@ fun Route.houses(
         }
     }
 
+    get("v1/filters"){
+        val parameters = call.request.queryParameters
+        try {
+            val categoryId = parameters["categoryId"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "Category ID Is Invalid..."
+            )
+
+           val filteredHouses = db.getFilteredHouses(categoryId.toLong())
+            if (filteredHouses != null){
+                call.respond(status = HttpStatusCode.OK, filteredHouses)
+            }else{
+                call.respond(status = HttpStatusCode.NotFound, "No House Found")
+            }
+
+        }catch (e: Exception){
+            call.respond(
+                status = HttpStatusCode.Unauthorized,
+                message = e
+            )
+        }
+
+    }
 
 }
 
