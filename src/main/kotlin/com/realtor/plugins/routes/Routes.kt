@@ -763,16 +763,16 @@ fun Route.houses(
     get("v1/filters"){
         val parameters = call.request.queryParameters
         try {
-            val categoryId = parameters["categoryId"] ?: return@get call.respond(
+            val categoryTitle = parameters["categoryTitle"] ?: return@get call.respond(
                 status = HttpStatusCode.BadRequest,
-                message = "Category ID Is Invalid..."
+                message = "categoryTitle  Is Invalid..."
             )
             val title = parameters["title"] ?: return@get call.respond(
                 status = HttpStatusCode.BadRequest,
                 message = "Title is Invalid"
             )
 
-           val filteredHouses = db.getFilteredHouses(categoryId = categoryId.toLong(), title = title)
+           val filteredHouses = db.getFilteredHouses(categoryTitle = categoryTitle, title = title)
             if (filteredHouses != null){
                 call.respond(status = HttpStatusCode.OK, filteredHouses)
             }else{
