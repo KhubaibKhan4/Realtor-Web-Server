@@ -771,8 +771,12 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest,
                 message = "Title is Invalid"
             )
+            val city = parameters["city"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "City is Invalid"
+            )
 
-           val filteredHouses = db.getFilteredHouses(categoryTitle = categoryTitle, title = title)
+           val filteredHouses = db.getFilteredHouses(categoryTitle = categoryTitle, title = title, city = city)
             if (filteredHouses != null){
                 call.respond(status = HttpStatusCode.OK, filteredHouses)
             }else{
