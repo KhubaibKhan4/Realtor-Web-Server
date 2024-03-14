@@ -104,6 +104,7 @@ interface HousesDao {
     ): Int?
     suspend fun getFilteredHouses(
         categoryTitle: String,
-        title: String
+        title: String,
+        city: String
     ): List<Houses>?
 }
