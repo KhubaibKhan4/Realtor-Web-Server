@@ -264,6 +264,17 @@ class HousesRepository : HousesDao {
         }
     }
 
+    override suspend fun getFilteredHouses(
+        categoryId: Long?,
+        city: String?,
+        beds: String?,
+        baths: String,
+        minPrice: String?,
+        maxPrice: String?
+    ): List<Houses>? {
+        TODO("Not yet implemented")
+    }
+
     private fun rowToResult(row: ResultRow): Houses? {
         return row[HousesTable.id]?.let { id ->
             Houses(
