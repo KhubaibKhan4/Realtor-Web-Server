@@ -278,8 +278,30 @@ class HousesRepository : HousesDao {
             city?.let { query.andWhere { HousesTable.city eq it } }
             minPrice?.let { query.andWhere { HousesTable.price greaterEq it } }
             maxPrice?.let { query.andWhere { HousesTable.price lessEq it } }
-            query.mapNotNull { rowToResult(it) }
+            query.mapNotNull {row->
+               rowToResult(row)
+            }
         }
+    }
+    private fun matchesCriteria(
+        house: Houses,
+        beds: String?,
+        baths: String?
+    ): Boolean {
+        // Parse beds and baths from the rooms field
+        val rooms = house.rooms.split("+").map { it.trim() }
+        val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull()
+        val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull()
+
+        // Check if beds and baths match the criteria
+        if (beds != null && houseBeds != null && houseBeds != beds.toIntOrNull()) {
+            return false
+        }
+        if (baths != null && houseBaths != null && houseBaths != baths.toIntOrNull()) {
+            return false
+        }
+
+        return true
     }
 
     private fun rowToResult(row: ResultRow): Houses? {
