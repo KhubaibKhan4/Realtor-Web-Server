@@ -279,7 +279,14 @@ class HousesRepository : HousesDao {
             minPrice?.let { query.andWhere { HousesTable.price greaterEq it } }
             maxPrice?.let { query.andWhere { HousesTable.price lessEq it } }
             query.mapNotNull {row->
-               rowToResult(row)
+               val house = rowToResult(row)
+                house?.let {
+                    if (matchesCriteria(it,beds, baths)){
+                        it
+                    }else{
+                        null
+                    }
+                }
             }
         }
     }
