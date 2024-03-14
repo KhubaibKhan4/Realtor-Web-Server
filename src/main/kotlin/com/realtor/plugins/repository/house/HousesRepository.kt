@@ -272,13 +272,13 @@ class HousesRepository : HousesDao {
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
-                HousesTable.categoryTitle.eq(categoryTitle) or HousesTable.title.eq(title) or HousesTable.city.eq(
-                    city
-                ) or HousesTable.rooms.eq(beds.toString())
-            }
-                .mapNotNull {
+                HousesTable.categoryTitle.eq(categoryTitle) or   HousesTable.title.eq(title) or HousesTable.city.eq(city)
+            }.mapNotNull {
                     rowToResult(it)
-                }
+            }.filter  { house ->
+                val houseBeds = house.rooms.split(" ")[0].toIntOrNull()
+                houseBeds != null && houseBeds >=beds
+            }
         }
     }
 
