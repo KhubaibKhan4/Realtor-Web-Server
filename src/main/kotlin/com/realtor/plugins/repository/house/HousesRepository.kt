@@ -272,7 +272,14 @@ class HousesRepository : HousesDao {
         minPrice: String?,
         maxPrice: String?
     ): List<Houses>? {
-        TODO("Not yet implemented")
+        return DatabaseFactory.dbQuery {
+            val query = HousesTable.selectAll()
+            categoryId?.let { query.andWhere { HousesTable.categoryId eq it } }
+            city?.let { query.andWhere { HousesTable.city eq it } }
+            minPrice?.let { query.andWhere { HousesTable.price greaterEq it } }
+            maxPrice?.let { query.andWhere { HousesTable.price lessEq it } }
+            query.mapNotNull { rowToResult(it) }
+        }
     }
 
     private fun rowToResult(row: ResultRow): Houses? {
