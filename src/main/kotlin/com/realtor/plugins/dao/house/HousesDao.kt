@@ -102,4 +102,12 @@ interface HousesDao {
         basement: Boolean,
         pool: Boolean
     ): Int?
+    suspend fun getFilteredHouses(
+        categoryId: Long?,
+        city: String?,
+        beds: String?,
+        baths: String,
+        minPrice: String?,
+        maxPrice: String?
+    ): List<Houses>?
 }
