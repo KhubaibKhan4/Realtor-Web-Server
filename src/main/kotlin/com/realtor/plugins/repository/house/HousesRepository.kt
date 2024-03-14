@@ -266,24 +266,30 @@ class HousesRepository : HousesDao {
 
     override suspend fun getFilteredHouses(
         categoryId: Long?,
+        name: String?,
         city: String?,
-        beds: String?,
-        baths: String,
-        minPrice: String?,
-        maxPrice: String?
+        location: String?,
+        area: Long?,
+        beds: Long?,
+        baths: Long?,
+        minPrice: Long?,
+        maxPrice: Long?
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             val query = HousesTable.selectAll()
             categoryId?.let { query.andWhere { HousesTable.categoryId eq it } }
+            name?.let { query.andWhere { HousesTable.title eq it } }
             city?.let { query.andWhere { HousesTable.city eq it } }
+            location?.let { query.andWhere { HousesTable.address eq it } }
+            area?.let { query.andWhere { HousesTable.area eq it } }
             minPrice?.let { query.andWhere { HousesTable.price greaterEq it } }
             maxPrice?.let { query.andWhere { HousesTable.price lessEq it } }
-            query.mapNotNull {row->
-               val house = rowToResult(row)
+            query.mapNotNull { row ->
+                val house = rowToResult(row)
                 house?.let {
-                    if (matchesCriteria(it,beds, baths)){
+                    if (matchesCriteria(it, beds.toString(), baths.toString())) {
                         it
-                    }else{
+                    } else {
                         null
                     }
                 }
