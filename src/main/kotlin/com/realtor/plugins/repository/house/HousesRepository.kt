@@ -264,9 +264,9 @@ class HousesRepository : HousesDao {
         }
     }
 
-    override suspend fun getFilteredHouses(categoryTitle: String, title: String): List<Houses>? {
+    override suspend fun getFilteredHouses(categoryTitle: String, title: String, city: String): List<Houses>? {
         return DatabaseFactory.dbQuery {
-            HousesTable.select { HousesTable.categoryTitle.eq(categoryTitle) or HousesTable.title.eq(title) }
+            HousesTable.select { HousesTable.categoryTitle.eq(categoryTitle) or HousesTable.title.eq(title) or HousesTable.city.eq(city) }
                 .mapNotNull {
                     rowToResult(it)
                 }
