@@ -774,7 +774,7 @@ fun Route.houses(
 
             val filteredHouses = db.getFilteredHouses(
                 categoryId = category,
-                name = name,
+                name = name?.lowercase(),
                 city = city?.lowercase(),
                 location = location,
                 area = area,
