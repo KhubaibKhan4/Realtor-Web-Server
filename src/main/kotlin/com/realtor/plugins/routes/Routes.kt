@@ -759,11 +759,21 @@ fun Route.houses(
             )
         }
     }
-    get("v1/house/filter"){
+    get("v1/house/filter") {
         try {
             val parameters = call.request.queryParameters
+            val name = parameters["name"]
+            val cityName = parameters["cityName"]
+            val locationName = parameters["locationName"]
+            val area = parameters["area"]?.toLongOrNull()
+            val category = parameters["category"]?.toLongOrNull()
+            val beds = parameters["beds"]?.toLongOrNull()
+            val baths = parameters["baths"]?.toLongOrNull()
+            val minPrice = parameters["minPrice"]?.toLongOrNull()
+            val maxPrice = parameters["maxPrice"]?.toLongOrNull()
 
-        }catch (e: Exception){
+
+        } catch (e: Exception) {
 
         }
     }
