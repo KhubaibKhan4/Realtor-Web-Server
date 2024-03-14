@@ -763,8 +763,8 @@ fun Route.houses(
         try {
             val parameters = call.request.queryParameters
             val name = parameters["name"]
-            val cityName = parameters["cityName"]
-            val locationName = parameters["locationName"]
+            val city = parameters["city"]
+            val location = parameters["location"]
             val area = parameters["area"]?.toLongOrNull()
             val category = parameters["category"]?.toLongOrNull()
             val beds = parameters["beds"]?.toLongOrNull()
@@ -772,24 +772,22 @@ fun Route.houses(
             val minPrice = parameters["minPrice"]?.toLongOrNull()
             val maxPrice = parameters["maxPrice"]?.toLongOrNull()
 
-            val filteredHouses = HousesRepository().getFilteredHouses(
+            val filteredHouses = db.getFilteredHouses(
                 categoryId = category,
                 name = name,
-                city = cityName,
-                location = locationName,
+                city = city?.lowercase(),
+                location = location,
                 area = area,
                 beds = beds,
                 baths = baths,
                 minPrice = minPrice,
                 maxPrice = maxPrice
             )
-            if (filteredHouses !=null){
+            if (filteredHouses != null) {
                 call.respond(HttpStatusCode.OK, filteredHouses)
-            }else{
+            } else {
                 call.respond(HttpStatusCode.NotFound)
             }
-
-
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError)
         }

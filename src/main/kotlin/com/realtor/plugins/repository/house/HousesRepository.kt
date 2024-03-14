@@ -277,13 +277,25 @@ class HousesRepository : HousesDao {
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             val query = HousesTable.selectAll()
+
             categoryId?.let { query.andWhere { HousesTable.categoryId eq it } }
             name?.let { query.andWhere { HousesTable.title eq it } }
             city?.let { query.andWhere { HousesTable.city eq it } }
             location?.let { query.andWhere { HousesTable.address eq it } }
             area?.let { query.andWhere { HousesTable.area eq it } }
-            minPrice?.let { query.andWhere { HousesTable.price greaterEq it } }
-            maxPrice?.let { query.andWhere { HousesTable.price lessEq it } }
+
+            minPrice?.let { minPrice ->
+                query.andWhere {
+                    (HousesTable.price greaterEq minPrice.toString()) or (HousesTable.price.isNull())
+                }
+            }
+
+            maxPrice?.let { maxPrice ->
+                query.andWhere {
+                    (HousesTable.price lessEq maxPrice.toString()) or (HousesTable.price.isNull())
+                }
+            }
+
             query.mapNotNull { row ->
                 val house = rowToResult(row)
                 house?.let {
@@ -296,6 +308,7 @@ class HousesRepository : HousesDao {
             }
         }
     }
+
     private fun matchesCriteria(
         house: Houses,
         beds: String?,
