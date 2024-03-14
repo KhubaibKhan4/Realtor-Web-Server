@@ -762,10 +762,21 @@ fun Route.houses(
     get("v1/house/filter") {
         try {
             val parameters = call.request.queryParameters
-            val name = parameters["name"]
+            println("Query Parameters: $parameters")
+
+            val name = parameters["name"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "Name Invalid"
+            )
             val city = parameters["city"]
-            val location = parameters["location"]
-            val area = parameters["area"]?.toLongOrNull()
+            val location = parameters["location"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "City Invalid"
+            )
+            val area = parameters["area"]?.toLongOrNull() ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "Name Invalid"
+            )
             val category = parameters["category"]?.toLongOrNull()
             val beds = parameters["beds"]?.toLongOrNull()
             val baths = parameters["baths"]?.toLongOrNull()
@@ -783,15 +794,18 @@ fun Route.houses(
                 minPrice = minPrice,
                 maxPrice = maxPrice
             )
+            println("Filtered Houses: $filteredHouses")
             if (filteredHouses != null) {
                 call.respond(HttpStatusCode.OK, filteredHouses)
             } else {
                 call.respond(HttpStatusCode.NotFound)
             }
         } catch (e: Exception) {
+            println("Error: ${e.message}")
             call.respond(HttpStatusCode.InternalServerError)
         }
     }
+
 
 }
 
