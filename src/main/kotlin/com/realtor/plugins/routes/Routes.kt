@@ -772,10 +772,26 @@ fun Route.houses(
             val minPrice = parameters["minPrice"]?.toLongOrNull()
             val maxPrice = parameters["maxPrice"]?.toLongOrNull()
 
-            val filteredHouses = db.getFilteredHouses()
+            val filteredHouses = HousesRepository().getFilteredHouses(
+                categoryId = category,
+                name = name,
+                city = cityName,
+                location = locationName,
+                area = area,
+                beds = beds,
+                baths = baths,
+                minPrice = minPrice,
+                maxPrice = maxPrice
+            )
+            if (filteredHouses !=null){
+                call.respond(HttpStatusCode.OK, filteredHouses)
+            }else{
+                call.respond(HttpStatusCode.NotFound)
+            }
+
 
         } catch (e: Exception) {
-
+            call.respond(HttpStatusCode.InternalServerError)
         }
     }
 
