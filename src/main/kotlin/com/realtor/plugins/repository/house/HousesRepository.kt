@@ -264,6 +264,15 @@ class HousesRepository : HousesDao {
         }
     }
 
+    override suspend fun getFilteredHouses(categoryId: Long): List<Houses>? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select { HousesTable.categoryId.eq(categoryId) }
+                .mapNotNull {
+                    rowToResult(it)
+                }
+        }
+    }
+
     private fun rowToResult(row: ResultRow): Houses? {
         return row[HousesTable.id]?.let { id ->
             Houses(

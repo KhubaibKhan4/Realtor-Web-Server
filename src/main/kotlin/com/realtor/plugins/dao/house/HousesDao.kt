@@ -103,6 +103,6 @@ interface HousesDao {
         pool: Boolean
     ): Int?
     suspend fun getFilteredHouses(
-        categoryId: Long?
+        categoryId: Long
     ): List<Houses>?
 }
