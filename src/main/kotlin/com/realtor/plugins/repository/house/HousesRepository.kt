@@ -1,9 +1,9 @@
 package com.realtor.plugins.repository.house
 
+import com.realtor.domain.local.DatabaseFactory
 import com.realtor.plugins.dao.house.HousesDao
 import com.realtor.plugins.data.model.house.Houses
 import com.realtor.plugins.data.table.house.HousesTable
-import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -262,72 +262,6 @@ class HousesRepository : HousesDao {
                 house[HousesTable.pool] = pool
             }
         }
-    }
-
-    override suspend fun getFilteredHouses(
-        categoryId: Long?,
-        name: String?,
-        city: String?,
-        location: String?,
-        area: Long?,
-        beds: Long?,
-        baths: Long?,
-        minPrice: Long?,
-        maxPrice: Long?
-    ): List<Houses>? {
-        return DatabaseFactory.dbQuery {
-            val query = HousesTable.selectAll()
-
-            categoryId?.let { query.andWhere { HousesTable.categoryId eq it } }
-            name?.let { query.andWhere { HousesTable.title eq it } }
-            city?.let { query.andWhere { HousesTable.city eq it } }
-            location?.let { query.andWhere { HousesTable.address eq it } }
-            area?.let { query.andWhere { HousesTable.area eq it } }
-
-            minPrice?.let { minPrice ->
-                query.andWhere {
-                    (HousesTable.price greaterEq minPrice.toString()) or (HousesTable.price.isNull())
-                }
-            }
-
-            maxPrice?.let { maxPrice ->
-                query.andWhere {
-                    (HousesTable.price lessEq maxPrice.toString()) or (HousesTable.price.isNull())
-                }
-            }
-
-            query.mapNotNull { row ->
-                val house = rowToResult(row)
-                house?.let {
-                    if (matchesCriteria(it, beds.toString(), baths.toString())) {
-                        it
-                    } else {
-                        null
-                    }
-                }
-            }
-        }
-    }
-
-    private fun matchesCriteria(
-        house: Houses,
-        beds: String?,
-        baths: String?
-    ): Boolean {
-        // Parse beds and baths from the rooms field
-        val rooms = house.rooms.split("+").map { it.trim() }
-        val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull()
-        val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull()
-
-        // Check if beds and baths match the criteria
-        if (beds != null && houseBeds != null && houseBeds != beds.toIntOrNull()) {
-            return false
-        }
-        if (baths != null && houseBaths != null && houseBaths != baths.toIntOrNull()) {
-            return false
-        }
-
-        return true
     }
 
     private fun rowToResult(row: ResultRow): Houses? {

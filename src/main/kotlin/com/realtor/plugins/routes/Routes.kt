@@ -759,52 +759,6 @@ fun Route.houses(
             )
         }
     }
-    get("v1/house/filter") {
-        try {
-            val parameters = call.request.queryParameters
-            println("Query Parameters: $parameters")
-
-            val name = parameters["name"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Name Invalid"
-            )
-            val city = parameters["city"]
-            val location = parameters["location"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "City Invalid"
-            )
-            val area = parameters["area"]?.toLongOrNull() ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Name Invalid"
-            )
-            val category = parameters["category"]?.toLongOrNull()
-            val beds = parameters["beds"]?.toLongOrNull()
-            val baths = parameters["baths"]?.toLongOrNull()
-            val minPrice = parameters["minPrice"]?.toLongOrNull()
-            val maxPrice = parameters["maxPrice"]?.toLongOrNull()
-
-            val filteredHouses = db.getFilteredHouses(
-                categoryId = category,
-                name = name?.lowercase(),
-                city = city?.lowercase(),
-                location = location,
-                area = area,
-                beds = beds,
-                baths = baths,
-                minPrice = minPrice,
-                maxPrice = maxPrice
-            )
-            println("Filtered Houses: $filteredHouses")
-            if (filteredHouses != null) {
-                call.respond(HttpStatusCode.OK, filteredHouses)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
-            }
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-            call.respond(HttpStatusCode.InternalServerError)
-        }
-    }
 
 
 }
