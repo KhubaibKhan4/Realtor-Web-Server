@@ -759,6 +759,14 @@ fun Route.houses(
             )
         }
     }
+    get("v1/house/filter"){
+        try {
+            val parameters = call.request.queryParameters
+
+        }catch (e: Exception){
+
+        }
+    }
 
 }
 
