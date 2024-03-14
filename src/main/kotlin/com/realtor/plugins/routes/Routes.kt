@@ -772,6 +772,7 @@ fun Route.houses(
             val minPrice = parameters["minPrice"]?.toLongOrNull()
             val maxPrice = parameters["maxPrice"]?.toLongOrNull()
 
+            val filteredHouses = db.getFilteredHouses()
 
         } catch (e: Exception) {
 

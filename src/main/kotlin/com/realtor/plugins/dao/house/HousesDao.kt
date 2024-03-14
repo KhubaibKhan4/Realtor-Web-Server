@@ -104,10 +104,13 @@ interface HousesDao {
     ): Int?
     suspend fun getFilteredHouses(
         categoryId: Long?,
+        name: String?,
         city: String?,
-        beds: String?,
-        baths: String,
-        minPrice: String?,
-        maxPrice: String?
+        location: String?,
+        area: Long?,
+        beds: Long?,
+        baths: Long?,
+        minPrice: Long?,
+        maxPrice: Long?
     ): List<Houses>?
 }
