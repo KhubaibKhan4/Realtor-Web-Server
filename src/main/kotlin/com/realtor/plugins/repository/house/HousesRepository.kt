@@ -270,22 +270,24 @@ class HousesRepository : HousesDao {
         city: String,
         beds: Int,
         baths: Int,
-        minPrice: Double?
+        minPrice: Double?,
+        maxPrice: Double?
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
-                HousesTable.categoryTitle.eq(categoryTitle) or   HousesTable.title.eq(title) or HousesTable.city.eq(city)
+                HousesTable.categoryTitle.eq(categoryTitle) or HousesTable.title.eq(title) or HousesTable.city.eq(city)
             }.mapNotNull {
-                    rowToResult(it)
-            }.filter  { house ->
+                rowToResult(it)
+            }.filter { house ->
                 val rooms = house.rooms.split("+").map { it.trim() }
                 val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val housePrice = parsePrice(house.price)
-                houseBeds >= beds && houseBaths >= baths && (minPrice == null || housePrice >= minPrice)
+                houseBeds >= beds && houseBaths >= baths && (minPrice == null || housePrice >= minPrice) && (maxPrice == null || housePrice <= maxPrice)
             }
         }
     }
+
     private fun parsePrice(price: String): Double {
         val cleanedPrice = price
             .replace("$", "")
