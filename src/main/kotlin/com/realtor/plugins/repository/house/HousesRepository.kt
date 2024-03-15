@@ -1,9 +1,9 @@
 package com.realtor.plugins.repository.house
 
+import com.realtor.domain.local.DatabaseFactory
 import com.realtor.plugins.dao.house.HousesDao
 import com.realtor.plugins.data.model.house.Houses
 import com.realtor.plugins.data.table.house.HousesTable
-import com.realtor.domain.local.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -260,6 +260,24 @@ class HousesRepository : HousesDao {
                 house[HousesTable.garage] = garage
                 house[HousesTable.basement] = basement
                 house[HousesTable.pool] = pool
+            }
+        }
+    }
+
+    override suspend fun getFilteredHouses(
+        categoryTitle: String,
+        title: String,
+        city: String,
+        beds: Int
+    ): List<Houses>? {
+        return DatabaseFactory.dbQuery {
+            HousesTable.select {
+                HousesTable.categoryTitle.eq(categoryTitle) or   HousesTable.title.eq(title) or HousesTable.city.eq(city)
+            }.mapNotNull {
+                    rowToResult(it)
+            }.filter  { house ->
+                val houseBeds = house.rooms.split(" ")[0].toIntOrNull()
+                houseBeds != null && houseBeds >=beds
             }
         }
     }
