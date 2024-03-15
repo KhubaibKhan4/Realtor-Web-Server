@@ -783,13 +783,25 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest,
                 message = "Baths is Invalid"
             )
+            val minPriceParam = parameters["minPrice"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "Price is Invalid"
+            )
+            val minPrice = minPriceParam?.let {
+                try {
+                    it.replace(",","").toDouble()
+                }catch (e: NumberFormatException){
+                    null
+                }
+            }
 
             val filteredHouses = db.getFilteredHouses(
                 categoryTitle = categoryTitle,
                 title = title,
                 city = city,
                 beds = beds.toInt(),
-                baths = baths.toInt()
+                baths = baths.toInt(),
+                minPrice = minPrice
             )
             if (filteredHouses != null) {
                 call.respond(status = HttpStatusCode.OK, filteredHouses)
