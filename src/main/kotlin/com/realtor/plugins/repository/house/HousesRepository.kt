@@ -292,7 +292,6 @@ class HousesRepository : HousesDao {
             .replace("M", "")
             .replace(",", "")
             .trim()
-
         return cleanedPrice.toDoubleOrNull() ?: 0.0
     }
 
