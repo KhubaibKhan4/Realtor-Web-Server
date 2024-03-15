@@ -277,8 +277,9 @@ class HousesRepository : HousesDao {
             }.mapNotNull {
                     rowToResult(it)
             }.filter  { house ->
-                val houseBeds = house.rooms.split(" ")[0].toIntOrNull()
-                houseBeds != null && houseBeds >=beds
+                val houseBeds = house.rooms.split(" ")[0].toIntOrNull() ?: 0
+                val houseBaths = house.rooms.split(" ")[2].toIntOrNull() ?: 0
+                houseBeds >= beds && houseBaths >= baths
             }
         }
     }
