@@ -285,6 +285,9 @@ class HousesRepository : HousesDao {
             }
         }
     }
+    private fun parsePrice(price: String): Double{
+        return price.replace("$","").replace("M","").trim().toDoubleOrNull() ?: 0.0
+    }
 
     private fun rowToResult(row: ResultRow): Houses? {
         return row[HousesTable.id]?.let { id ->
