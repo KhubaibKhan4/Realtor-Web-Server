@@ -285,8 +285,14 @@ class HousesRepository : HousesDao {
             }
         }
     }
-    private fun parsePrice(price: String): Double{
-        return price.replace("$","").replace("M","").trim().toDoubleOrNull() ?: 0.0
+    private fun parsePrice(price: String): Double {
+        val cleanedPrice = price
+            .replace("$", "")
+            .replace("M", "")
+            .replace(",", "")
+            .trim()
+
+        return cleanedPrice.toDoubleOrNull() ?: 0.0
     }
 
     private fun rowToResult(row: ResultRow): Houses? {
