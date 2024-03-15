@@ -281,7 +281,7 @@ class HousesRepository : HousesDao {
                 val rooms = house.rooms.split("+").map { it.trim() }
                 val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
-                houseBeds >= beds && houseBaths >= baths
+                houseBeds >= beds && houseBaths >= baths && (minPrice == null || parsePrice(house.price) >= minPrice)
             }
         }
     }
