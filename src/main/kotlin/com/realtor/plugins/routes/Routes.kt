@@ -760,7 +760,7 @@ fun Route.houses(
         }
     }
 
-    get("v1/filters"){
+    get("v1/filters") {
         val parameters = call.request.queryParameters
         try {
             val categoryTitle = parameters["categoryTitle"] ?: return@get call.respond(
@@ -779,15 +779,25 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest,
                 message = "Beds is Invalid"
             )
+            val baths = parameters["baths"] ?: return@get call.respond(
+                status = HttpStatusCode.BadRequest,
+                message = "Baths is Invalid"
+            )
 
-           val filteredHouses = db.getFilteredHouses(categoryTitle = categoryTitle, title = title, city = city, beds = beds.toInt())
-            if (filteredHouses != null){
+            val filteredHouses = db.getFilteredHouses(
+                categoryTitle = categoryTitle,
+                title = title,
+                city = city,
+                beds = beds.toInt(),
+                baths = baths.toInt()
+            )
+            if (filteredHouses != null) {
                 call.respond(status = HttpStatusCode.OK, filteredHouses)
-            }else{
+            } else {
                 call.respond(status = HttpStatusCode.NotFound, "No House Found")
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             call.respond(
                 status = HttpStatusCode.Unauthorized,
                 message = e
