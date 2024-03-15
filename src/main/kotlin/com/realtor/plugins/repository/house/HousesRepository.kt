@@ -268,7 +268,8 @@ class HousesRepository : HousesDao {
         categoryTitle: String,
         title: String,
         city: String,
-        beds: Int
+        beds: Int,
+        baths: Int
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
