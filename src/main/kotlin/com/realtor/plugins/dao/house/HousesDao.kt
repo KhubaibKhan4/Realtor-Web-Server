@@ -107,6 +107,7 @@ interface HousesDao {
         title: String,
         city: String,
         beds: Int,
-        baths: Int
+        baths: Int,
+        minPrice: Double?
     ): List<Houses>?
 }
