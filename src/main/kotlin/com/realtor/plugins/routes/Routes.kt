@@ -787,7 +787,7 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest,
                 message = "Minimum Price is Invalid"
             )
-            val minPrice = minPriceParam?.let {
+            val minPrice = minPriceParam.let {
                 try {
                     it.replace(",","").toDouble()
                 }catch (e: NumberFormatException){
