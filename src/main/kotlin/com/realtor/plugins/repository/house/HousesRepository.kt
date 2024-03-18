@@ -275,7 +275,7 @@ class HousesRepository : HousesDao {
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
-                (HousesTable.type eq categoryTitle) or (HousesTable.title eq title) or (HousesTable.city eq city) or (HousesTable.address eq categoryTitle)
+                (HousesTable.categoryTitle eq categoryTitle) or (HousesTable.type eq categoryTitle) or (HousesTable.title eq title) or (HousesTable.city eq city) or (HousesTable.address eq categoryTitle)
             }.mapNotNull {
                 rowToResult(it)
             }.filter { house ->
