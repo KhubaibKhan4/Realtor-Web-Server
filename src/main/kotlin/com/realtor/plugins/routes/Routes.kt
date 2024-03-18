@@ -765,7 +765,7 @@ fun Route.houses(
         try {
             val categoryTitle = parameters["categoryTitle"] ?: return@get call.respond(
                 status = HttpStatusCode.BadRequest,
-                message = "categoryTitle  Is Invalid..."
+                message = "categoryTitle is Invalid"
             )
             val title = parameters["title"] ?: return@get call.respond(
                 status = HttpStatusCode.BadRequest,
@@ -775,52 +775,32 @@ fun Route.houses(
                 status = HttpStatusCode.BadRequest,
                 message = "City is Invalid"
             )
-            val beds = parameters["beds"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Beds is Invalid"
-            )
-            val baths = parameters["baths"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Baths is Invalid"
-            )
-            val minPriceParam = parameters["minPrice"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Minimum Price is Invalid"
-            )
-            val minPrice = minPriceParam.let {
-                try {
-                    it.replace(",","").toDouble()
-                }catch (e: NumberFormatException){
-                    null
-                }
-            }
-            val maxPrice = parameters["maxPrice"] ?: return@get call.respond(
-                status = HttpStatusCode.BadRequest,
-                message = "Maximum Price is Invalid"
-            )
+            val beds = parameters["beds"]?.toIntOrNull() // Nullable
+            val baths = parameters["baths"]?.toIntOrNull() // Nullable
+            val minPrice = parameters["minPrice"]?.toDoubleOrNull() // Nullable
+            val maxPrice = parameters["maxPrice"]?.toDoubleOrNull() // Nullable
 
             val filteredHouses = db.getFilteredHouses(
                 categoryTitle = categoryTitle,
                 title = title,
                 city = city,
-                beds = beds.toInt(),
-                baths = baths.toInt(),
+                beds = beds,
+                baths = baths,
                 minPrice = minPrice,
-                maxPrice = maxPrice.toDoubleOrNull()
+                maxPrice = maxPrice
             )
+
             if (filteredHouses != null) {
                 call.respond(status = HttpStatusCode.OK, filteredHouses)
             } else {
                 call.respond(status = HttpStatusCode.NotFound, "No House Found")
             }
-
         } catch (e: Exception) {
             call.respond(
-                status = HttpStatusCode.Unauthorized,
-                message = e
+                status = HttpStatusCode.InternalServerError,
+                message = "Internal Server Error"
             )
         }
-
     }
 
 }
