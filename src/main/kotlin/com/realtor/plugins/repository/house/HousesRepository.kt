@@ -275,7 +275,11 @@ class HousesRepository : HousesDao {
     ): List<Houses>? {
         return DatabaseFactory.dbQuery {
             HousesTable.select {
-                (HousesTable.categoryTitle eq categoryTitle) or (HousesTable.type eq categoryTitle) or (HousesTable.title eq title) or (HousesTable.city eq city) or (HousesTable.address eq categoryTitle)
+                (HousesTable.categoryTitle like "%$categoryTitle%") or
+                        (HousesTable.type like "%$categoryTitle%") or
+                        (HousesTable.title like "%$title%") or
+                        (HousesTable.city like "%$city%") or
+                        (HousesTable.address like "%$categoryTitle%")
             }.mapNotNull {
                 rowToResult(it)
             }.filter { house ->
@@ -283,11 +287,14 @@ class HousesRepository : HousesDao {
                 val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val housePrice = parsePrice(house.price)
-                (beds == null || houseBeds >= beds) && (baths == null || houseBaths >= baths) &&
-                        (minPrice == null || housePrice >= minPrice) && (maxPrice == null || housePrice <= maxPrice)
+                (beds == null || houseBeds >= beds) &&
+                        (baths == null || houseBaths >= baths) &&
+                        (minPrice == null || housePrice >= minPrice) &&
+                        (maxPrice == null || housePrice <= maxPrice)
             }
         }
     }
+
 
     private fun parsePrice(price: String): Double {
         val cleanedPrice = price
