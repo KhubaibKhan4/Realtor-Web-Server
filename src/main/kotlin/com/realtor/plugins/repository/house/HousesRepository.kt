@@ -268,8 +268,8 @@ class HousesRepository : HousesDao {
         categoryTitle: String,
         title: String,
         city: String,
-        beds: Int,
-        baths: Int,
+        beds: Int?,
+        baths: Int?,
         minPrice: Double?,
         maxPrice: Double?
     ): List<Houses>? {
@@ -283,7 +283,8 @@ class HousesRepository : HousesDao {
                 val houseBeds = rooms.getOrNull(0)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val houseBaths = rooms.getOrNull(1)?.split(" ")?.firstOrNull()?.toIntOrNull() ?: 0
                 val housePrice = parsePrice(house.price)
-                houseBeds >= beds && houseBaths >= baths && (minPrice == null || housePrice >= minPrice) && (maxPrice == null || housePrice <= maxPrice)
+                (beds == null || houseBeds >= beds) && (baths == null || houseBaths >= baths) &&
+                        (minPrice == null || housePrice >= minPrice) && (maxPrice == null || housePrice <= maxPrice)
             }
         }
     }
