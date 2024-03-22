@@ -1,0 +1,1 @@
+web: java -jar build/libs/com.realtor.realtor-web-all.jar
